@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LDAP Filter Toolbox</title>
+    <link rel="stylesheet" href="app.css" />
+</head>
+<body>
+    <div class="container">
+        <section class="hero">
+            <h1 class="title">LDAP Filter Toolbox</h1>
+            <p class="subtitle">
+                Paste an LDAP filter to validate syntax, format it, inspect the JSON AST, and escape assertion values for safe use.
+            </p>
+        </section>
+
+        <div class="cards-grid">
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Filter input</h2>
+                    <p class="card-subtitle">Supports AND, OR, NOT, equality, presence, substring, &gt;=, &lt;=, and ~= operators.</p>
+                </div>
+                <div class="card-body">
+                    <div class="toolbar">
+                        <button class="primary" id="parseBtn">Parse now</button>
+                        <button id="formatBtn">Format</button>
+                        <button id="formatAndCopyBtn">Format &amp; copy</button>
+                        <button id="clearBtn">Clear</button>
+                    </div>
+
+                    <textarea id="filterInput" rows="12" spellcheck="false">(&(objectClass=user)(|(cn=John*)(sn=Doe))(!(accountStatus=disabled)))</textarea>
+
+                    <div class="input-meta">
+                        <span class="status" id="statusBadge">Ready</span>
+                        <span class="kpi">Length: <strong id="lengthValue">0</strong></span>
+                        <span class="kpi">Parses on input: <strong>Yes</strong></span>
+                    </div>
+
+                    <div class="error-inline" id="errorBox">
+                        <div id="errorMessage"></div>
+                        <div class="caret-line"><pre id="errorCaret"></pre></div>
+                    </div>
+                </div>
+            </section>
+                      
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Assertion value escape helper</h2>
+                    <p class="card-subtitle">Escapes special characters for LDAP filter assertion values.</p>
+                </div>
+                <div class="card-body">
+                    <div class="two-col">
+                        <div>
+                            <label class="small" for="escapeInput">Raw value</label>
+                            <input type="text" id="escapeInput" value="C:\Program Files (x86)\*" />
+                        </div>
+                        <div>
+                            <label class="small" for="escapeOutput">Escaped value</label>
+                            <input type="text" id="escapeOutput" readonly /><button id="copyEscapeBtn">Copy escaped value</button>
+                        </div>
+                    </div>
+                    <div class="copy-row">
+                        
+                    </div>
+                    <div class="pill-row">
+                        <span class="chip small">\* → \2a</span>
+                        <span class="chip small">( → \28</span>
+                        <span class="chip small">) → \29</span>
+                        <span class="chip small">\ → \5c</span>
+                        <span class="chip small">NUL → \00</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card card-span-2">
+                <div class="card-header">
+                    <h2 class="card-title">Notes</h2>
+                    <p class="card-subtitle">This MVP is intentionally practical rather than exhaustive.</p>
+                </div>
+                <div class="card-body">
+                    <ul class="list">
+                        <li>It handles the most common RFC 4515 filter forms used in many real systems.</li>
+                        <li>It rejects raw mandatory-escape characters inside assertion values unless properly escaped, while still allowing <code>*</code> for equality-based substring and presence filters.</li>
+                        <li>It does not implement extensible match syntax such as <code>(cn:caseExactMatch:=John)</code>.</li>
+                        <li>Attribute validation is intentionally simplified for an MVP.</li>
+                        <li>The page runs entirely in the browser.</li>
+                    </ul>
+                    <div class="footer-info">
+                        <a href="http://www.ietf.org/rfc/rfc4515.txt">RFC 4515</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
