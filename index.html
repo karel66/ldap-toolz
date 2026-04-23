@@ -32,21 +32,23 @@
                         <button id="clearBtn">Clear</button>
                     </div>
 
-                    <textarea id="filterInput" rows="12" spellcheck="false">(&(objectClass=user)(|(cn=John*)(sn=Doe))(!(accountStatus=disabled)))</textarea>
+                    <div class="input-wrapper">
+                        <textarea id="filterInput" rows="12" spellcheck="false">(&(objectClass=user)(|(cn=John*)(sn=Doe))(!(accountStatus=disabled)))</textarea>
+                        <span class="status" id="statusBadge">Ready</span>
+                    </div>
 
                     <div class="input-meta">
-                        <span class="status" id="statusBadge">Ready</span>
-                        <span class="kpi">Length: <strong id="lengthValue">0</strong></span>
-                        <span class="kpi">Parses on input: <strong>Yes</strong></span>
+                        <span class="kpi" style="display: none;">Length: <strong id="lengthValue">0</strong></span>
                     </div>
 
                     <div class="error-inline" id="errorBox">
                         <div id="errorMessage"></div>
                         <div class="caret-line"><pre id="errorCaret"></pre></div>
                     </div>
+
                 </div>
             </section>
-                      
+
             <section class="card" style="display: none;">
                 <div class="card-header">
                     <h2 class="card-title">Assertion value escape helper</h2>

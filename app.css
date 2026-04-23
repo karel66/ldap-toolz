@@ -60,11 +60,8 @@ body {
 }
 
 .title {
-    font-size: clamp(28px, 4vw, 42px);
     line-height: 1.1;
     margin: 0 0 8px 0;
-    font-weight: 800;
-    letter-spacing: -0.02em;
 }
 
 .subtitle {
@@ -285,3 +282,20 @@ code {
     font-size: 13px;
     line-height: 1.6;
 }
+
+.input-wrapper {
+    position: relative;
+}
+
+    .input-wrapper textarea {
+        width: 100%;
+        padding-right: 110px; /* prevent text under badge */
+    }
+
+    .input-wrapper .status {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+        z-index: 2;
+        pointer-events: none; /* optional: makes it non-clickable */
+    }
