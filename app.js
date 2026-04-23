@@ -200,7 +200,11 @@ formatAndCopyBtn.addEventListener("click", () => {
 });
 
 clearBtn.addEventListener("click", () => {
-    filterInput.value = "";
+    filterInput.focus();
+    filterInput.setSelectionRange(0, filterInput.value.length);
+    // Delete selection (like pressing Delete key)
+    document.execCommand("delete");
+
     errorBox.style.display = "none";
     render();
 });

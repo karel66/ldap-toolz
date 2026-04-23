@@ -21,6 +21,7 @@
                 <div class="card-header">
                     <h2 class="card-title">Filter input</h2>
                     <p class="card-subtitle">Supports AND, OR, NOT, equality, presence, substring, &gt;=, &lt;=, and ~= operators.</p>
+                    <p class="card-subtitle">Supports escaping special characters in LDAP filter assertion values: <code>'*' → \2a, '(' → \28, ')' → \29, '\' → \5c</code>.</p>
                 </div>
                 <div class="card-body">
                     <div class="toolbar">
@@ -46,10 +47,10 @@
                 </div>
             </section>
                       
-            <section class="card">
+            <section class="card" style="display: none;">
                 <div class="card-header">
                     <h2 class="card-title">Assertion value escape helper</h2>
-                    <p class="card-subtitle">Escapes special characters for LDAP filter assertion values.</p>
+                    <p class="card-subtitle">Escapes special characters for LDAP filter assertion values: '*' → \2a, '(' → \28, ')' → \29, '\' → \5c.</p>
                 </div>
                 <div class="card-body">
                     <div class="two-col">
@@ -65,31 +66,23 @@
                     <div class="copy-row">
                         <button id="copyEscapeBtn">Copy escaped value</button>
                     </div>
-                    <div class="pill-row">
-                        <span class="chip small">\* → \2a</span>
-                        <span class="chip small">( → \28</span>
-                        <span class="chip small">) → \29</span>
-                        <span class="chip small">\ → \5c</span>
-                        <span class="chip small">NUL → \00</span>
-                    </div>
                 </div>
             </section>
 
             <section class="card card-span-2">
                 <div class="card-header">
                     <h2 class="card-title">Notes</h2>
-                    <p class="card-subtitle">This MVP is intentionally practical rather than exhaustive.</p>
                 </div>
                 <div class="card-body">
-                    <ul class="list">
-                        <li>It handles the most common RFC 4515 filter forms used in many real systems.</li>
-                        <li>It rejects raw mandatory-escape characters inside assertion values unless properly escaped, while still allowing <code>*</code> for equality-based substring and presence filters.</li>
-                        <li>It does not implement extensible match syntax such as <code>(cn:caseExactMatch:=John)</code>.</li>
-                        <li>Attribute validation is intentionally simplified for an MVP.</li>
-                        <li>The page runs entirely in the browser.</li>
-                    </ul>
+                    <p class="card-subtitle">This MVP is intentionally practical rather than exhaustive.</p>
+
                     <div class="footer-info">
-                        <a href="http://www.ietf.org/rfc/rfc4515.txt">RFC 4515</a>
+                        <ul class="list">
+                            <li>It handles the most common  <a href="http://www.ietf.org/rfc/rfc4515.txt" target="_blank">RFC 4515</a> filter forms used in many real systems.</li>
+                            <li>It does not implement extensible match syntax such as <code>(cn:caseExactMatch:=John)</code>.</li>
+                            <li>Attribute validation is intentionally simplified for an MVP.</li>
+                            <li>The page runs entirely in the browser.</li>
+                        </ul>
                     </div>
                 </div>
             </section>
