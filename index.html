@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>LDAP Filter Toolbox</title>
     <link rel="stylesheet" href="app.css" />
+    <script src="parser.js"></script>
 </head>
 <body>
     <div class="container">
         <section class="hero">
             <h1 class="title">LDAP Filter Toolbox</h1>
             <p class="subtitle">
-                Paste an LDAP filter to validate syntax, format it, inspect the JSON AST, and escape assertion values for safe use.
+                Paste an LDAP filter to validate syntax, format it and escape assertion values for safe use.
             </p>
         </section>
 
@@ -26,6 +27,7 @@
                         <button class="primary" id="parseBtn">Parse now</button>
                         <button id="formatBtn">Format</button>
                         <button id="formatAndCopyBtn">Format &amp; copy</button>
+                        <button id="escapeBtn">Escape selection</button>
                         <button id="clearBtn">Clear</button>
                     </div>
 
@@ -57,11 +59,11 @@
                         </div>
                         <div>
                             <label class="small" for="escapeOutput">Escaped value</label>
-                            <input type="text" id="escapeOutput" readonly /><button id="copyEscapeBtn">Copy escaped value</button>
+                            <input type="text" id="escapeOutput" readonly />
                         </div>
                     </div>
                     <div class="copy-row">
-                        
+                        <button id="copyEscapeBtn">Copy escaped value</button>
                     </div>
                     <div class="pill-row">
                         <span class="chip small">\* → \2a</span>
