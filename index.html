@@ -3,14 +3,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>LDAP Filter Toolbox</title>
-    <link rel="stylesheet" href="app.css" />
-    <script src="parser.js"></script>
+    <title>LDAP Filter Parser & Validator Online</title>
+    <meta name="description" content="Validate, parse, escape, and format LDAP search filters online. Free browser-based LDAP filter syntax checker.">
+    <link rel="stylesheet" href="./app.css" />
+    <script src="./parser.js"></script>
 </head>
 <body>
     <div class="container">
         <section class="hero">
-            <h1 class="title">LDAP Filter Toolbox</h1>
+            <h1>LDAP Filter Parser & Validator Online</h1>
             <p class="subtitle">
                 Paste an LDAP filter to validate syntax, format it and escape assertion values for safe use.
             </p>
@@ -21,7 +22,7 @@
                 <div class="card-header">
                     <h2 class="card-title">Filter input</h2>
                     <p class="card-subtitle">Supports AND, OR, NOT, equality, presence, substring, &gt;=, &lt;=, and ~= operators.</p>
-                    <p class="card-subtitle">Supports escaping special characters in LDAP filter assertion values: <code>'*' → \2a, '(' → \28, ')' → \29, '\' → \5c</code>.</p>
+                    <p class="card-subtitle">Supports escaping special characters in LDAP filter assertion values: <code>'*' → \2a</code>, <code>'(' → \28</code>, <code>')' → \29</code>, <code>'\' → \5c</code>.</p>
                 </div>
                 <div class="card-body">
                     <div class="toolbar">
@@ -76,13 +77,12 @@
                     <h2 class="card-title">Notes</h2>
                 </div>
                 <div class="card-body">
-                    <p class="card-subtitle">This MVP is intentionally practical rather than exhaustive.</p>
-
+                    <p class="card-subtitle">This page is intentionally practical rather than exhaustive.</p>
                     <div class="footer-info">
                         <ul class="list">
                             <li>It handles the most common  <a href="http://www.ietf.org/rfc/rfc4515.txt" target="_blank">RFC 4515</a> filter forms used in many real systems.</li>
                             <li>It does not implement extensible match syntax such as <code>(cn:caseExactMatch:=John)</code>.</li>
-                            <li>Attribute validation is intentionally simplified for an MVP.</li>
+                            <li>Attribute validation is intentionally simplified.</li>
                             <li>The page runs entirely in the browser.</li>
                         </ul>
                     </div>
@@ -91,6 +91,6 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="./app.js"></script>
 </body>
 </html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://karel66.github.io/ldap-toolz/sitemap.xml

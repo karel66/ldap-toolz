@@ -93,6 +93,8 @@ function validateLdapFilter(input) {
     return LdapFilterParser.tryParse(input);
 }
 
+
+
 const filterInput = document.getElementById("filterInput");
 const parseBtn = document.getElementById("parseBtn");
 const formatBtn = document.getElementById("formatBtn");
@@ -111,8 +113,21 @@ const escapeBtn = document.getElementById("escapeBtn");
 let debounceHandle = null;
 
 function setStatus(text, kind) {
-    statusBadge.textContent = text;
-    statusBadge.className = `status ${kind}`;
+    const icons = {
+        ok: "✔",
+        error: "✖",
+        warn: "⚠"
+    };
+
+    const icon = icons[kind];
+
+    if (icon) {
+        statusBadge.innerHTML = `<span class="icon">${icon}</span> ${text}`;
+    } else {
+        statusBadge.textContent = text;
+    }
+
+    statusBadge.className = `status status-inline ${kind}`;
 }
 
 function makeCaretPointer(source, position) {
@@ -136,7 +151,7 @@ function render() {
     lengthValue.textContent = String(value.length);
 
     if (value.trim() === "") {
-        setStatus("Empty input", "warn");
+        setStatus("", "warn");
         errorBox.style.display = "none";
         return;
     }
@@ -144,14 +159,14 @@ function render() {
     const result = validateLdapFilter(value);
 
     if (!result.ok) {
-        setStatus("Invalid filter", "error");
+        setStatus("", "error");
         errorBox.style.display = "block";
         errorMessage.textContent = result.error.fullMessage;
         errorCaret.textContent = makeCaretPointer(value, result.error.position);
         return;
     }
 
-    setStatus("Valid filter", "ok");
+    setStatus("", "ok");
     errorBox.style.display = "none";
 }
 
