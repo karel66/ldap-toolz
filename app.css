@@ -287,44 +287,59 @@ code {
     position: relative;
 }
 
-.input-wrapper textarea {
-    
-}
+    .input-wrapper textarea {
+    }
 
 .status-inline {
     position: absolute;
     top: 10px;
     right: 12px;
     z-index: 2;
-
     padding: 4px 9px;
     border-radius: 6px;
-
     font-size: 12px;
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-weight: 600;
     line-height: 1.2;
-
     background: transparent;
-    
     color: #cccccc;
-
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     pointer-events: none;
 }
 
-.status-inline .icon {
-    font-weight: 700;
+    .status-inline .icon {
+        font-weight: 700;
+    }
+
+    .status-inline.error .icon {
+        color: #f48771; /* VSCode-like red */
+    }
+
+    .status-inline.ok .icon {
+        color: #89d185;
+    }
+
+    .status-inline.warn .icon {
+        color: #cca700;
+    }
+
+#cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #222;
+    color: #fff;
+    padding: 12px;
+    font-size: 14px;
+    display: none;
+    z-index: 9999;
+    text-align: center;
 }
 
-.status-inline.error .icon {
-    color: #f48771; /* VSCode-like red */
-}
-
-.status-inline.ok .icon {
-    color: #89d185;
-}
-
-.status-inline.warn .icon {
-    color: #cca700;
-}
+    #cookie-banner button {
+        margin-left: 10px;
+        padding: 6px 12px;
+        border: none;
+        cursor: pointer;
+    }

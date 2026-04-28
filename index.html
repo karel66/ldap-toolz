@@ -12,14 +12,6 @@
     <script src="./parser.js"></script>
 </head>
 <body>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GDK3Q7RWM4"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-GDK3Q7RWM4');
-    </script>
     <div class="container">
         <section class="hero">
             <h1>LDAP Filter Parser & Validator Online</h1>
@@ -101,6 +93,13 @@
             </section>
         </div>
     </div>
+
+    <div id="cookie-banner">
+        This site uses analytics cookies.
+        <button id="accept-cookies" class="primary">Accept</button>
+        <button id="decline-cookies">Decline</button>
+    </div>
+    <script src="./ga.js"></script>
 
     <script src="./app.js"></script>
 
