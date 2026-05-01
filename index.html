@@ -5,99 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>LDAP Filter Parser & Validator Online</title>
     <meta name="description" content="Validate, parse, escape, and format LDAP search filters online. Free browser-based LDAP filter syntax checker.">
-    <link rel="stylesheet" href="./app.css" />
     <link rel="icon" href="./favicon.ico" sizes="any">
     <link rel="icon" href="./favicon.png" type="image/png" sizes="32x32">
     <link rel="icon" href="./favicon.png" type="image/png" sizes="16x16">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="./app.css" rel="stylesheet" />
     <script src="./parser.js"></script>
 </head>
 <body>
     <div class="container">
-        <section class="hero">
-            <h1>LDAP Filter Parser & Validator Online</h1>
-            <p class="subtitle">
-                Paste an LDAP filter to validate syntax, format it and escape assertion values for safe use.
+        <div class="mb-4">
+            <h1>LDAP Filter Parser & Validator</h1>
+            <p class="text-muted">
+                Validate, format and inspect LDAP filters.
             </p>
-        </section>
+        </div>
 
-        <div class="cards-grid">
-            <section class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Filter input</h2>
-                    <p class="card-subtitle">Supports AND, OR, NOT, equality, presence, substring, &gt;=, &lt;=, and ~= operators.</p>
-                    <p class="card-subtitle">Supports escaping special characters in LDAP filter assertion values: <code>'*' → \2a</code>, <code>'(' → \28</code>, <code>')' → \29</code>, <code>'\' → \5c</code>.</p>
-                </div>
-                <div class="card-body">
-                    <div class="toolbar">
-                        <button class="primary" id="parseBtn">Parse now</button>
-                        <button id="formatBtn">Format</button>
-                        <button id="formatAndCopyBtn">Format &amp; copy</button>
-                        <button id="escapeBtn">Escape selection</button>
-                        <button id="clearBtn">Clear</button>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="card shadow-sm"  style="height:100%"> 
+
+                    <div class="card-header">
+                        <h5 class="mb-1">Filter Input</h5>
+                        <small class="text-muted">
+                            Supports AND, OR, NOT, equality, presence, substring, >=, <=, ~=.
+                        </small>
                     </div>
-
-                    <div class="input-wrapper">
-                        <textarea id="filterInput" rows="12" spellcheck="false">(&(objectClass=user)(|(cn=John*)(sn=Doe))(!(accountStatus=disabled)))</textarea>
-                        <span class="status" id="statusBadge">Ready</span>
-                    </div>
-
-                    <div class="input-meta">
-                        <span class="kpi" style="display: none;">Length: <strong id="lengthValue">0</strong></span>
-                    </div>
-
-                    <div class="error-inline" id="errorBox">
-                        <div id="errorMessage"></div>
-                        <div class="caret-line"><pre id="errorCaret"></pre></div>
-                    </div>
-
-                </div>
-            </section>
-
-            <section class="card" style="display: none;">
-                <div class="card-header">
-                    <h2 class="card-title">Assertion value escape helper</h2>
-                    <p class="card-subtitle">Escapes special characters for LDAP filter assertion values: '*' → \2a, '(' → \28, ')' → \29, '\' → \5c.</p>
-                </div>
-                <div class="card-body">
-                    <div class="two-col">
-                        <div>
-                            <label class="small" for="escapeInput">Raw value</label>
-                            <input type="text" id="escapeInput" value="C:\Program Files (x86)\*" />
+                    <div class="card-body">
+                        <div class="mb-3 d-flex flex-wrap gap-2">
+                            <button class="btn btn-primary" id="parseBtn">Parse</button>
+                            <button class="btn btn-outline-secondary" id="formatBtn">Format</button>
+                            <button class="btn btn-outline-secondary" id="formatAndCopyBtn">Format & Copy</button>
+                            <button class="btn btn-outline-secondary" id="escapeBtn">Escape selection</button>
+                            <button class="btn btn-outline-danger" id="clearBtn">Clear</button>
                         </div>
-                        <div>
-                            <label class="small" for="escapeOutput">Escaped value</label>
-                            <input type="text" id="escapeOutput" readonly />
+
+                        <div class="row g-3">
+                            <div class="position-relative">
+                                <textarea id="filterInput" class="form-control" rows="12" spellcheck="false">(&(objectClass=user)(|(cn=John*)(sn=Doe))(!(accountStatus=disabled)))</textarea>
+
+                                <span id="statusBadge" class="badge bg-secondary status-inline">
+                                    Ready
+                                </span>
+                            </div>
+                            <div style="height:100px">
+                                <div id="errorBox" class="mt-3 d-none">
+                                    <div id="errorMessage" class="text-danger"></div>
+                                    <pre id="errorCaret" class="caret-line mb-0"></pre>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="copy-row">
-                        <button id="copyEscapeBtn">Copy escaped value</button>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="card shadow-sm" style="height:100%">
+                    <div class="card-header">
+                        <h5 class="mb-1">Syntax Tree</h5>
+                        <small class="text-muted">
+                            Parsed filter structure.
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <pre id="syntaxTree" class="syntax-tree">
+                        </pre>
                     </div>
                 </div>
-            </section>
+            </div>
+        </div>
 
-            <section class="card card-span-2">
-                <div class="card-header">
-                    <h2 class="card-title">Notes</h2>
+
+        <div class="card shadow-sm mt-4">
+            <div class="card-header">
+                <h5 class="card-title">Notes</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-subtitle">This page is intentionally practical rather than exhaustive.</p>
+                <div class="footer-info">
+                    <ul class="list">
+                        <li>It handles the most common  <a href="http://www.ietf.org/rfc/rfc4515.txt" target="_blank">RFC 4515</a> filter forms used in many real systems.</li>
+                        <li>It does not implement extensible match syntax such as <code>(cn:caseExactMatch:=John)</code>.</li>
+                        <li>Attribute validation is intentionally simplified.</li>
+                        <li>The page runs entirely in the browser.</li>
+                    </ul>
                 </div>
-                <div class="card-body">
-                    <p class="card-subtitle">This page is intentionally practical rather than exhaustive.</p>
-                    <div class="footer-info">
-                        <ul class="list">
-                            <li>It handles the most common  <a href="http://www.ietf.org/rfc/rfc4515.txt" target="_blank">RFC 4515</a> filter forms used in many real systems.</li>
-                            <li>It does not implement extensible match syntax such as <code>(cn:caseExactMatch:=John)</code>.</li>
-                            <li>Attribute validation is intentionally simplified.</li>
-                            <li>The page runs entirely in the browser.</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+            </div>
         </div>
     </div>
 
     <div id="cookie-banner">
         This site uses analytics cookies.
-        <button id="accept-cookies" class="primary">Accept</button>
-        <button id="decline-cookies">Decline</button>
+        <button id="accept-cookies" class="btn btn-primary">Accept</button>
+        <button id="decline-cookies" class="btn btn-secondary">Decline</button>
     </div>
     <script src="./ga.js"></script>
 

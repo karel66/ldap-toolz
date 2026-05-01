@@ -47,18 +47,6 @@ function formatLdapFilter(ast, indent = 0) {
     }
 }
 
-function escapeLdapFilterValue(value) {
-    if (value == null) {
-        return "";
-    }
-
-    return String(value)
-        .replace(/\\/g, "\\5c")
-        .replace(/\*/g, "\\2a")
-        .replace(/\(/g, "\\28")
-        .replace(/\)/g, "\\29")
-        .replace(/\0/g, "\\00");
-}
 
 function escapeSelectedLdapValue(inputEl) {
     const start = inputEl.selectionStart;
@@ -89,6 +77,7 @@ function escapeSelectedLdapValue(inputEl) {
     document.execCommand("insertText", false, escaped);
 }
 
+// Returns { ok: boolean, ast?: object, error?: { fullMessage: string, position: number } }
 function validateLdapFilter(input) {
     return LdapFilterParser.tryParse(input);
 }
@@ -103,8 +92,6 @@ const statusBadge = document.getElementById("statusBadge");
 const errorBox = document.getElementById("errorBox");
 const errorMessage = document.getElementById("errorMessage");
 const errorCaret = document.getElementById("errorCaret");
-const escapeInput = document.getElementById("escapeInput");
-const escapeOutput = document.getElementById("escapeOutput");
 const lengthValue = document.getElementById("lengthValue");
 const formatAndCopyBtn = document.getElementById("formatAndCopyBtn");
 const copyEscapeBtn = document.getElementById("copyEscapeBtn");
@@ -142,17 +129,14 @@ function makeCaretPointer(source, position) {
     return `${line}\n${" ".repeat(col)}^`;
 }
 
-function updateEscapeHelper() {
-    escapeOutput.value = escapeLdapFilterValue(escapeInput.value);
-}
 
 function render() {
     const value = filterInput.value;
-    lengthValue.textContent = String(value.length);
 
     if (value.trim() === "") {
         setStatus("", "warn");
-        errorBox.style.display = "none";
+        errorBox.classList.add("d-none");
+        document.getElementById("syntaxTree").textContent = "";
         return;
     }
 
@@ -160,14 +144,16 @@ function render() {
 
     if (!result.ok) {
         setStatus("", "error");
-        errorBox.style.display = "block";
+        errorBox.classList.remove("d-none");
         errorMessage.textContent = result.error.fullMessage;
         errorCaret.textContent = makeCaretPointer(value, result.error.position);
         return;
     }
 
+    document.getElementById("syntaxTree").textContent = JSON.stringify(result.ast, null, 2);
+
     setStatus("", "ok");
-    errorBox.style.display = "none";
+    errorBox.classList.add("d-none");
 }
 
 function renderDebounced() {
@@ -205,7 +191,16 @@ formatBtn.addEventListener("click", () => {
         render();
     }
 
-    filterInput.value = formatLdapFilter(result.ast);
+    filterInput.focus();
+
+    // Select current range (ensure it's active)
+    filterInput.setSelectionRange(0, filterInput.value.length);
+
+    // Delete selection (like pressing Delete key)
+    document.execCommand("delete");
+
+    // Insert escaped text (like typing)
+    document.execCommand("insertText", false, formatLdapFilter(result.ast));
     render();
 });
 
@@ -220,7 +215,7 @@ clearBtn.addEventListener("click", () => {
     // Delete selection (like pressing Delete key)
     document.execCommand("delete");
 
-    errorBox.style.display = "none";
+    errorBox.classList.add("d-none");
     render();
 });
 
@@ -229,11 +224,5 @@ escapeBtn.addEventListener("click", () => {
 });
 
 filterInput.addEventListener("input", renderDebounced);
-escapeInput.addEventListener("input", updateEscapeHelper);
 
-copyEscapeBtn.addEventListener("click", () => {
-    copyText(escapeOutput.value, "Copied", copyEscapeBtn);
-});
-
-updateEscapeHelper();
 render();
