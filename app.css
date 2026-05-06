@@ -1,5 +1,334 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    color-scheme: dark;
+    --bg: #0f172a;
+    --panel: #111827;
+    --panel-soft: #172033;
+    --text: #e5e7eb;
+    --muted: #9ca3af;
+    --border: #334155;
+    --primary: #60a5fa;
+    --primary-hover: #3b82f6;
+    --primary-text: #07111f;
+    --danger: #f87171;
+    --danger-hover: #ef4444;
+    --secondary: #94a3b8;
+    --secondary-hover: #cbd5e1;
+    --control-bg: #0b1220;
+    --control-border: #475569;
+    --focus-ring: rgba(96, 165, 250, 0.25);
+    --shadow: rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #f7f7f8;
+    --panel: #ffffff;
+    --panel-soft: #f1f5f9;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #d1d5db;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-text: #ffffff;
+    --danger: #dc2626;
+    --danger-hover: #b91c1c;
+    --secondary: #64748b;
+    --secondary-hover: #475569;
+    --control-bg: #ffffff;
+    --control-border: #cbd5e1;
+    --focus-ring: rgba(37, 99, 235, 0.18);
+    --shadow: rgba(15, 23, 42, 0.12);
+}
+
 body {
+    margin: 0;
     padding: 24px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.5;
+}
+
+a {
+    color: var(--primary);
+}
+
+a:hover {
+    color: var(--secondary-hover);
+}
+
+h1,
+h5,
+p {
+    margin-top: 0;
+}
+
+h1 {
+    margin-bottom: 8px;
+    font-size: 2rem;
+}
+
+h2 {
+    margin-top: 32px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+}
+
+h5 {
+    font-size: 1.05rem;
+}
+
+pre {
+    padding: 12px;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--control-bg);
+    color: var(--text);
+}
+
+code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+table {
+    width: 100%;
+    margin: 16px 0;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 10px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+}
+
+th {
+    background: var(--panel-soft);
+    text-align: left;
+}
+
+.container {
+    width: min(100%, 1080px);
+    margin: 0 auto;
+}
+
+.manual {
+    width: min(100%, 980px);
+    margin: 0 auto;
+    padding-bottom: 32px;
+}
+
+.note {
+    margin: 16px 0;
+    padding: 10px 12px;
+    border-left: 4px solid var(--primary);
+    border-radius: 0 8px 8px 0;
+    background: rgba(96, 165, 250, 0.12);
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -8px;
+    margin-right: -8px;
+}
+
+.row > * {
+    width: 100%;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.g-3 {
+    row-gap: 16px;
+}
+
+.col-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.card-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel-soft);
+}
+
+.card-body {
+    padding: 16px;
+}
+
+.card-title {
+    margin-bottom: 0;
+}
+
+.card-subtitle,
+.text-muted {
+    color: var(--muted);
+}
+
+.shadow-sm {
+    box-shadow: 0 12px 30px var(--shadow);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 8px 12px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary-text);
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+    color: #fff;
+}
+
+.btn-secondary,
+.btn-outline-secondary {
+    border-color: var(--secondary);
+    color: var(--secondary);
+}
+
+.btn-secondary {
+    background: var(--secondary);
+    color: #0f172a;
+}
+
+.btn-secondary:hover,
+.btn-outline-secondary:hover {
+    background: var(--secondary-hover);
+    border-color: var(--secondary-hover);
+    color: #0f172a;
+}
+
+.btn-outline-danger {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.btn-outline-danger:hover {
+    background: var(--danger-hover);
+    border-color: var(--danger-hover);
+    color: #fff;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--control-border);
+    border-radius: 6px;
+    background: var(--control-bg);
+    color: var(--text);
+    font: inherit;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: var(--muted);
+}
+
+.badge {
+    display: inline-block;
+}
+
+.bg-secondary {
+    background: var(--secondary);
+    color: #0f172a;
+}
+
+.text-danger {
+    color: var(--danger);
+}
+
+.position-relative {
+    position: relative;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.gap-2 {
+    gap: 8px;
+}
+
+.d-none {
+    display: none !important;
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
+.mb-1 {
+    margin-bottom: 4px;
+}
+
+.mb-2 {
+    margin-bottom: 8px;
+}
+
+.mb-3 {
+    margin-bottom: 16px;
+}
+
+.mb-4 {
+    margin-bottom: 24px;
+}
+
+.mt-3 {
+    margin-top: 16px;
+}
+
+.mt-4 {
+    margin-top: 24px;
+}
+
+.me-2 {
+    margin-right: 8px;
+}
+
+.list {
+    margin: 0;
+    padding-left: 20px;
 }
 
 textarea {
@@ -36,8 +365,8 @@ textarea {
     font-weight: 600;
     line-height: 1.2;
     background: transparent;
-    color: #cccccc;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    color: var(--text);
+    box-shadow: 0 2px 8px var(--shadow);
     pointer-events: none;
 }
 
@@ -70,8 +399,9 @@ textarea {
     bottom: 0;
     left: 0;
     right: 0;
-    background: #222;
-    color: #fff;
+    background: #020617;
+    color: var(--text);
+    border-top: 1px solid var(--border);
     padding: 12px;
     font-size: 14px;
     display: none;
@@ -88,4 +418,26 @@ textarea {
 
 .syntax-tree {
     font-size: 9px;
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 10000;
+    min-width: 64px;
+    min-height: 34px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--panel-soft);
+    color: var(--text);
+    box-shadow: 0 8px 20px var(--shadow);
+    font: 600 13px/1.2 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    cursor: pointer;
+}
+
+.theme-toggle:hover {
+    border-color: var(--primary);
+    color: var(--primary);
 }

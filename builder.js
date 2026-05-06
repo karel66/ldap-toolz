@@ -89,16 +89,19 @@ async function copyText(text, successLabel, button) {
     }
 }
 
+function resetInput() {
+    dslInput.focus();
+    dslInput.setSelectionRange(0, dslInput.value.length);
+    document.execCommand("delete");
+    dslInput.value = "{\r\n objectClass: \"\"\r\n}";
+}
+
 dslParseBtn.addEventListener("click", dslRender);
 
 dslClearBtn.addEventListener("click", () => {
-    dslInput.focus();
-    dslInput.setSelectionRange(0, dslInput.value.length);
-    // Delete selection (like pressing Delete key)
-    document.execCommand("delete");
-
+    resetInput();
     dslErrorBox.classList.add("d-none");
-    dslRender();
 });
 
+resetInput();
 dslRender();
