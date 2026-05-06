@@ -1,0 +1,257 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LDAP DSL User Manual (Beginner Friendly)</title>
+    <style>
+        :root {
+            --bg: #f7f7f8;
+            --panel: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #d1d5db;
+            --code-bg: #111827;
+            --code-text: #e5e7eb;
+            --accent: #2563eb;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        main {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 32px 20px 56px;
+        }
+
+        h1 { font-size: 2rem; margin-bottom: 8px; }
+        h2 { margin-top: 32px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            border-radius: 10px;
+            padding: 12px;
+            overflow-x: auto;
+        }
+
+        .note {
+            border-left: 4px solid var(--accent);
+            padding: 10px;
+            background: #eff6ff;
+            margin: 16px 0;
+        }
+
+        table { width:100%; border-collapse: collapse; margin:16px 0; }
+        th, td { border:1px solid var(--border); padding:10px; }
+        th { background:#eef2ff; }
+    </style>
+</head>
+<body>
+<main>
+
+<h1>LDAP DSL - Beginner Guide</h1>
+<p>This page explains a simple way to write LDAP filters with readable blocks and attribute expressions.</p>
+
+<h2>1. What is this?</h2>
+<p>LDAP filters are normally hard to read, like this:</p>
+<pre><code>(&amp;(objectClass=user)(mail=*))</code></pre>
+
+<p>With this DSL, you can write the same logic like this:</p>
+<pre><code>{
+    objectClass: "user"
+    mail: any
+}</code></pre>
+
+<div class="note">
+You do NOT need to know LDAP syntax to use this DSL.
+</div>
+
+<h2>2. Filter structure</h2>
+<p>A filter is made from one or more AND blocks. Each block uses curly braces, and each attribute expression inside a block must be on its own line.</p>
+<pre><code>{
+    objectClass: "user"
+    mail: any
+    accountStatus: not "disabled"
+}</code></pre>
+
+<p>Use <code>or</code> between blocks when any block may match:</p>
+<pre><code>{
+    department: "IT"
+    title: "*Engineer*"
+}
+or
+{
+    department: "Security"
+    title: "*Analyst*"
+}</code></pre>
+
+<p>Use <code>or not</code> when the next block must not match:</p>
+<pre><code>{
+    objectClass: "user"
+}
+or not
+{
+    accountStatus: "disabled"
+}</code></pre>
+
+<div class="note">
+Inside <code>{ }</code>, expressions are combined with AND. Separate sibling expressions with newlines, not spaces.
+</div>
+
+<h2>3. Attribute expressions</h2>
+<p>Most conditions use this shape:</p>
+<pre><code>attribute: operator-or-value</code></pre>
+
+<p>Examples:</p>
+<pre><code>cn: "John"
+mail: any
+age: &gt;= "18"</code></pre>
+
+<h2>4. Most common operations</h2>
+<table>
+<tr><th>What you want</th><th>Write this</th></tr>
+<tr><td>Exact match</td><td><code>cn: "John"</code></td></tr>
+<tr><td>Not equal</td><td><code>cn: not "John"</code></td></tr>
+<tr><td>Attribute exists</td><td><code>mail: any</code></td></tr>
+<tr><td>Attribute missing</td><td><code>mail: not any</code></td></tr>
+<tr><td>Contains text</td><td><code>cn: "*John*"</code></td></tr>
+<tr><td>Does NOT contain</td><td><code>cn: not "*Admin*"</code></td></tr>
+<tr><td>Starts with</td><td><code>cn: "Jo*"</code></td></tr>
+<tr><td>Does NOT start with</td><td><code>cn: not "Test*"</code></td></tr>
+<tr><td>Ends with</td><td><code>cn: "*son"</code></td></tr>
+<tr><td>Matches every listed value</td><td><code>memberOf: all of "A","B","C"</code></td></tr>
+<tr><td>Matches at least one listed value</td><td><code>department: any of "IT","HR","Finance"</code></td></tr>
+<tr><td>Does NOT match every listed value</td><td><code>memberOf: not all of "A","B","C"</code></td></tr>
+<tr><td>Does NOT match any listed value</td><td><code>department: not any of "IT","HR","Finance"</code></td></tr>
+<tr><td>Approximately matches (fuzzy)</td><td><code>cn: similar to "Jon"</code></td></tr>
+<tr><td>Does NOT approximately match</td><td><code>cn: not similar to "Jon"</code></td></tr>
+<tr><td>Greater than or equal</td><td><code>age: &gt;= "18"</code></td></tr>
+<tr><td>Less than or equal</td><td><code>age: &lt;= "65"</code></td></tr>
+<tr><td>Less than</td><td><code>age: &lt; "18"</code></td></tr>
+<tr><td>Greater than</td><td><code>age: &gt; "65"</code></td></tr>
+</table>
+
+<div class="note">
+Use <code>:</code> for equality values, presence, set equality, fuzzy matching, and ordering.
+</div>
+
+<h2>5. Combining conditions</h2>
+
+<h3>AND (all must match)</h3>
+<pre><code>{
+    objectClass: "user"
+    department: "IT"
+}</code></pre>
+
+<h3>OR (any can match)</h3>
+<pre><code>{
+    cn: "Admin*"
+}
+or
+{
+    cn: "Service*"
+}</code></pre>
+
+<h3>NOT (invert logic)</h3>
+<pre><code>not {
+    accountStatus: "disabled"
+    accountStatus: "locked"
+}</code></pre>
+
+<h2>6. Wildcards in equality</h2>
+<p>The <code>*</code> character is treated as an LDAP wildcard inside <code>:</code> equality values.</p>
+<table>
+<tr><th>Pattern</th><th>Meaning</th></tr>
+<tr><td><code>cn: "John"</code></td><td>Exact value</td></tr>
+<tr><td><code>cn: "John*"</code></td><td>Starts with John</td></tr>
+<tr><td><code>cn: "*John"</code></td><td>Ends with John</td></tr>
+<tr><td><code>cn: "*John*"</code></td><td>Contains John</td></tr>
+</table>
+
+<h2>7. Set equality shortcuts</h2>
+<p>Use set equality when the same attribute must be compared with several values.</p>
+<pre><code>memberOf: all of "Admins","VPN Users","Developers"</code></pre>
+<p>This is equivalent to:</p>
+<pre><code>{
+    memberOf: "Admins"
+    memberOf: "VPN Users"
+    memberOf: "Developers"
+}</code></pre>
+
+<pre><code>department: any of "IT","Security","Operations"</code></pre>
+<p>This matches when the attribute has at least one of the listed values.</p>
+
+<p>You can also negate set equality:</p>
+<pre><code>memberOf: not all of "Admins","VPN Users"
+department: not any of "HR","Finance"</code></pre>
+
+<h2>8. Ordering comparisons</h2>
+<p>Use ordering comparisons when your LDAP attribute values can be ordered by the server.</p>
+<pre><code>{
+    age: &gt;= "18"
+    age: &lt;= "65"
+}</code></pre>
+<p>Strict comparisons are available too:</p>
+<pre><code>{
+    age: &lt; "18"
+}
+or
+{
+    age: &gt; "65"
+}</code></pre>
+
+<div class="note">
+LDAP has native <code>&gt;=</code> and <code>&lt;=</code> filters. This DSL implements <code>&lt;</code> as NOT <code>&gt;=</code>, and <code>&gt;</code> as NOT <code>&lt;=</code>.
+</div>
+
+<h2>9. Approximate (fuzzy) matching</h2>
+<p>Use this when you want a "close enough" match (depends on LDAP server rules):</p>
+<pre><code>cn: similar to "Jon"</code></pre>
+<p>To invert it, write:</p>
+<pre><code>cn: not similar to "Jon"</code></pre>
+<p>This is useful for small spelling differences like <code>John</code> vs <code>Jon</code>.</p>
+
+<h2>10. Full example</h2>
+<pre><code>{
+    objectClass: "user"
+    department: any of "IT","Security","Operations"
+    title: any of "*Engineer*","*Architect*"
+    accountStatus: not "disabled"
+    mail: not any
+    cn: not "*Admin*"
+}
+or not
+{
+    accountStatus: "disabled"
+    lastLogonAge: &gt; "90"
+}</code></pre>
+
+<h2>11. Tips</h2>
+<ul>
+<li>Always use quotes for values: <code>"text"</code></li>
+<li>Use <code>{ }</code> for AND blocks</li>
+<li>Use <code>or</code> between blocks for OR</li>
+<li>Use <code>or not</code> before a block to invert that OR branch</li>
+<li>Use <code>:</code> for exact values and wildcard value patterns</li>
+<li>Use <code>: any</code> instead of remembering <code>=*</code></li>
+<li>Use <code>: similar to</code> for approximate (fuzzy) matching</li>
+</ul>
+
+</main>
+</body>
+</html>

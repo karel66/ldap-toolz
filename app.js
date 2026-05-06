@@ -92,14 +92,23 @@ const statusBadge = document.getElementById("statusBadge");
 const errorBox = document.getElementById("errorBox");
 const errorMessage = document.getElementById("errorMessage");
 const errorCaret = document.getElementById("errorCaret");
-const lengthValue = document.getElementById("lengthValue");
 const formatAndCopyBtn = document.getElementById("formatAndCopyBtn");
 const copyEscapeBtn = document.getElementById("copyEscapeBtn");
 const escapeBtn = document.getElementById("escapeBtn");
 
+const dslParseBtn = document.getElementById("dslParseBtn");
+const dslClearBtn = document.getElementById("dslClearBtn");
+
+const dslInput = document.getElementById("dslInput");
+const dslStatusBadge = document.getElementById("dslStatusBadge");
+const dslErrorBox = document.getElementById("dslError");
+const dslErrorMessage = document.getElementById("dslErrorMessage");
+const dslErrorCaret = document.getElementById("dslErrorCaret");
+
+
 let debounceHandle = null;
 
-function setStatus(text, kind) {
+function setStatus(statusBadge, text, kind) {
     const icons = {
         ok: "✔",
         error: "✖",
@@ -134,7 +143,7 @@ function render() {
     const value = filterInput.value;
 
     if (value.trim() === "") {
-        setStatus("", "warn");
+        setStatus(statusBadge, "", "warn");
         errorBox.classList.add("d-none");
         document.getElementById("syntaxTree").textContent = "";
         return;
@@ -143,20 +152,46 @@ function render() {
     const result = validateLdapFilter(value);
 
     if (!result.ok) {
-        setStatus("", "error");
+        setStatus(statusBadge, "", "error");
         errorBox.classList.remove("d-none");
         errorMessage.textContent = result.error.fullMessage;
         errorCaret.textContent = makeCaretPointer(value, result.error.position);
         return;
     }
 
-    document.getElementById("syntaxTree").textContent = JSON.stringify(result.ast, null, 2);
+    //document.getElementById("syntaxTree").textContent = JSON.stringify(result.ast, null, 2);
 
-    setStatus("", "ok");
+    setStatus(statusBadge, "", "ok");
     errorBox.classList.add("d-none");
 }
 
-function renderDebounced() {
+function dslRender() {
+    const value = dslInput.value;
+
+    if (value.trim() === "") {
+        setStatus(dslStatusBadge, "", "warn");
+        dslErrorBox.classList.add("d-none");
+        return;
+    }
+
+    const result = LdapDslParser.tryParse(value);
+
+    if (!result.ok) {
+        setStatus(dslStatusBadge, "", "error");
+        dslErrorBox.classList.remove("d-none");
+        dslErrorMessage.textContent = result.error.fullMessage;
+        dslErrorCaret.textContent = makeCaretPointer(value, result.error.position);
+        return;
+    }
+
+    filterInput.value = LdapDslConverter.toLdap(value);
+
+    setStatus(dslStatusBadge, "", "ok");
+    dslErrorBox.classList.add("d-none");
+}
+
+
+function renderDebounced(render) {
     window.clearTimeout(debounceHandle);
     debounceHandle = window.setTimeout(render, 220);
 }
@@ -214,7 +249,6 @@ clearBtn.addEventListener("click", () => {
     filterInput.setSelectionRange(0, filterInput.value.length);
     // Delete selection (like pressing Delete key)
     document.execCommand("delete");
-
     errorBox.classList.add("d-none");
     render();
 });
@@ -223,6 +257,18 @@ escapeBtn.addEventListener("click", () => {
     escapeSelectedLdapValue(filterInput);
 });
 
-filterInput.addEventListener("input", renderDebounced);
+dslParseBtn.addEventListener("click", dslRender);
 
-render();
+dslClearBtn.addEventListener("click", () => {
+    dslInput.focus();
+    dslInput.setSelectionRange(0, dslInput.value.length);
+    // Delete selection (like pressing Delete key)
+    document.execCommand("delete");
+
+    dslErrorBox.classList.add("d-none");
+    dslRender();
+});
+
+filterInput.addEventListener("input", () => renderDebounced(render));
+
+dslRender();
