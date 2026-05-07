@@ -66,6 +66,20 @@ function dslRender() {
 }
 
 
+
+function handleDslInputTab(event) {
+    if (event.key !== "Tab") {
+        return;
+    }
+
+    event.preventDefault();
+
+    const start = dslInput.selectionStart;
+    const end = dslInput.selectionEnd;
+    dslInput.setRangeText("	", start, end, "end");
+    renderDebounced();
+}
+
 function renderDebounced() {
     window.clearTimeout(debounceHandle);
     debounceHandle = window.setTimeout(dslRender, 220);
@@ -97,6 +111,7 @@ function resetInput() {
 }
 
 dslParseBtn.addEventListener("click", dslRender);
+dslInput.addEventListener("keydown", handleDslInputTab);
 
 dslClearBtn.addEventListener("click", () => {
     resetInput();
