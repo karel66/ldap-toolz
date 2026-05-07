@@ -454,6 +454,16 @@ function tokenize(input) {
             continue;
         }
 
+        if (input.startsWith("//", pos)) {
+            pos += 2;
+
+            while (pos < input.length && input[pos] !== "\r" && input[pos] !== "\n") {
+                pos++;
+            }
+
+            continue;
+        }
+
         if (/\s/.test(ch)) {
             pos++;
             continue;
