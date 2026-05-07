@@ -76,7 +76,7 @@ function handleDslInputTab(event) {
 
     const start = dslInput.selectionStart;
     const end = dslInput.selectionEnd;
-    dslInput.setRangeText("	", start, end, "end");
+    dslInput.setRangeText("    ", start, end, "end");
     renderDebounced();
 }
 
