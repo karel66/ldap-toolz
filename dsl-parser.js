@@ -587,10 +587,10 @@ function buildRawSubstringValue(initial, any, final) {
 function compileLdap(node) {
     switch (node.type) {
         case "and":
-            return `(&${node.children.map(compileLdap).join("")})`;
+            return compileLogicalGroup("&", node.children);
 
         case "or":
-            return `(|${node.children.map(compileLdap).join("")})`;
+            return compileLogicalGroup("|", node.children);
 
         case "not":
             return `(!${compileLdap(node.child)})`;
@@ -616,6 +616,16 @@ function compileLdap(node) {
         default:
             throw new Error(`Unsupported AST node type '${node.type}'`);
     }
+}
+
+function compileLogicalGroup(operator, children) {
+    const compiledChildren = children.map(compileLdap);
+
+    if (operator === "&" && compiledChildren.length === 1) {
+        return compiledChildren[0];
+    }
+
+    return `(${operator}${compiledChildren.join("")})`;
 }
 
 function compileSubstring(node) {
