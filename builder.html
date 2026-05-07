@@ -32,21 +32,41 @@
                     <button class="btn btn-primary" id="dslParseBtn">Parse</button>
                     <button class="btn btn-outline-danger" id="dslClearBtn">Reset</button>
                 </div>
-                <div class="row g-3">
-                    <div class="position-relative">
-                        <textarea id="dslInput" class="form-control" rows="12" spellcheck="false">
-                        </textarea>
-                        <span id="dslStatusBadge" class="badge bg-secondary status-inline">
-                            Ready
-                        </span>
-                    </div>
+                <div class="builder-layout">
+                    <div>
+                        <div class="position-relative">
+                            <textarea id="dslInput" class="form-control" rows="12" spellcheck="false">
+                            </textarea>
+                            <span id="dslStatusBadge" class="badge bg-secondary status-inline">
+                                Ready
+                            </span>
+                        </div>
 
-                    <div style="min-height:100px">
-                        <div id="dslError" class="mt-3 d-none">
-                            <div id="dslErrorMessage" class="text-danger"></div>
-                            <pre id="dslErrorCaret" class="caret-line mb-0"></pre>
+                        <div style="min-height:100px">
+                            <div id="dslError" class="mt-3 d-none">
+                                <div id="dslErrorMessage" class="text-danger"></div>
+                                <pre id="dslErrorCaret" class="caret-line mb-0"></pre>
+                            </div>
                         </div>
                     </div>
+
+                    <details class="cheat-sheet" open>
+                        <summary>LFL Cheat Sheet</summary>
+                        <ul class="list cheat-sheet-list">
+                            <li><code>{ objectClass: "user" }</code></li>
+                            <li><code>{ cn ~= "john" }</code> (contains)</li>
+                            <li><code>{ cn ^= "jo" }</code> (starts with)</li>
+                            <li><code>{ cn $= "hn" }</code> (ends with)</li>
+                            <li><code>{ cn != "john" }</code></li>
+                            <li><code>{ age >= 18 }</code></li>
+                            <li><code>{ isActive: true }</code></li>
+                            <li><code>{ !isDisabled }</code></li>
+                            <li><code>{ department in ["IT", "HR"] }</code></li>
+                            <li><code>{ memberOf any ["A", "B"] }</code></li>
+                            <li><code>{ (&amp; objectClass: "user", sn: "Smith") }</code></li>
+                            <li><code>{ (| sn: "Smith", sn: "Jones") }</code></li>
+                        </ul>
+                    </details>
                 </div>
             </div>
         </div>
