@@ -93,7 +93,7 @@ function resetInput() {
     dslInput.focus();
     dslInput.setSelectionRange(0, dslInput.value.length);
     document.execCommand("delete");
-    dslInput.value = "{\r\n objectClass: \"\"\r\n}";
+    dslInput.value = "{\r\n objectClass: \"*\"\r\n}";
 }
 
 dslParseBtn.addEventListener("click", dslRender);
