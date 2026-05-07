@@ -97,7 +97,6 @@ code {
 
 table {
     width: 100%;
-    margin: 16px 0;
     border-collapse: collapse;
 }
 
@@ -248,7 +247,6 @@ th {
     border-radius: 6px;
     background: var(--control-bg);
     color: var(--text);
-    font: inherit;
 }
 
 .form-control:focus {
@@ -444,7 +442,7 @@ textarea {
 
 .builder-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 320px;
+    grid-template-columns: minmax(0, 1fr) 400px;
     gap: 16px;
     align-items: start;
 }
@@ -453,21 +451,13 @@ textarea {
     border: 1px solid var(--border);
     border-radius: 8px;
     background: var(--control-bg);
-    padding: 10px 12px;
+    font-size: 0.8rem;
+    max-height: 600px;
+    overflow-y: auto;
 }
 
-.cheat-sheet summary {
-    cursor: pointer;
-    font-weight: 600;
-    margin-bottom: 8px;
-}
-
-.cheat-sheet-list {
-    margin-top: 8px;
-}
-
-.cheat-sheet-list li {
-    margin-bottom: 6px;
+button.float {
+    float: right;
 }
 
 @media (max-width: 960px) {

@@ -362,5 +362,53 @@ class LdapFilterParser {
     _isEof() {
         return this.pos >= this.input.length;
     }
-}
 
+
+    static formatLdapFilter(ast, indent = 0) {
+        const pad = "  ".repeat(indent);
+
+        switch (ast.type) {
+            case "and":
+                return [
+                    `${pad}(&`,
+                    ...ast.children.map((child) => LdapFilterParser.formatLdapFilter(child, indent + 1)),
+                    `${pad})`
+                ].join("\n");
+
+            case "or":
+                return [
+                    `${pad}(|`,
+                    ...ast.children.map((child) => LdapFilterParser.formatLdapFilter(child, indent + 1)),
+                    `${pad})`
+                ].join("\n");
+
+            case "not":
+                return [
+                    `${pad}(!`,
+                    LdapFilterParser.formatLdapFilter(ast.child, indent + 1),
+                    `${pad})`
+                ].join("\n");
+
+            case "equal":
+                return `${pad}(${ast.attribute}=${ast.value})`;
+
+            case "present":
+                return `${pad}(${ast.attribute}=*)`;
+
+            case "greaterOrEqual":
+                return `${pad}(${ast.attribute}>=${ast.value})`;
+
+            case "lessOrEqual":
+                return `${pad}(${ast.attribute}<=${ast.value})`;
+
+            case "approx":
+                return `${pad}(${ast.attribute}~=${ast.value})`;
+
+            case "substring":
+                return `${pad}(${ast.attribute}=${ast.rawValue})`;
+
+            default:
+                throw new Error(`Unknown AST node type '${ast.type}'`);
+        }
+    }
+}

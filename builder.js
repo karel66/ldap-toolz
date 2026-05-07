@@ -1,5 +1,6 @@
 const dslParseBtn = document.getElementById("dslParseBtn");
 const dslClearBtn = document.getElementById("dslClearBtn");
+const dslCopyBtn = document.getElementById("dslCopyBtn");
 
 const dslInput = document.getElementById("dslInput");
 const dslStatusBadge = document.getElementById("dslStatusBadge");
@@ -7,6 +8,8 @@ const dslErrorBox = document.getElementById("dslError");
 const dslErrorMessage = document.getElementById("dslErrorMessage");
 const dslErrorCaret = document.getElementById("dslErrorCaret");
 const ldapFilter = document.getElementById("ldapFilter");
+const btnCopy = document.getElementById("btnCopy");
+const ldapFormatBtn = document.getElementById("ldapFormatBtn");
 
 let debounceHandle = null;
 
@@ -59,6 +62,7 @@ function dslRender() {
         return;
     }
 
+
     ldapFilter.textContent = LdapDslConverter.toLdap(value);
 
     setStatus(dslStatusBadge, "", "ok");
@@ -107,15 +111,30 @@ function resetInput() {
     dslInput.focus();
     dslInput.setSelectionRange(0, dslInput.value.length);
     document.execCommand("delete");
-    dslInput.value = "{\r\n objectClass: \"*\"\r\n}";
+    dslInput.value = "{\r\n    objectClass: \"*\"\r\n}";
 }
 
 dslParseBtn.addEventListener("click", dslRender);
+
 dslInput.addEventListener("keydown", handleDslInputTab);
 
 dslClearBtn.addEventListener("click", () => {
     resetInput();
     dslErrorBox.classList.add("d-none");
+});
+
+btnCopy.addEventListener("click", () => {
+    copyText(ldapFilter.textContent, "Copied!", btnCopy);
+});
+
+dslCopyBtn.addEventListener("click", () => {
+    copyText(dslInput.value, "Copied!", dslCopyBtn);
+});
+
+ldapFormatBtn.addEventListener("click", () => {
+    const value = ldapFilter.textContent;
+    const ldapResult = LdapFilterParser.tryParse(value);
+    ldapFilter.textContent = ldapResult.ok ? LdapFilterParser.formatLdapFilter(ldapResult.ast) : "";
 });
 
 resetInput();

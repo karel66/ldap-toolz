@@ -11,25 +11,26 @@
     <link href="./app.css" rel="stylesheet" />
     <script src="./theme.js" defer></script>
     <script src="./dsl-parser.js"></script>
+    <script src="./ldap-parser.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="mb-4">
             <h1>LDAP Filter Builder Online</h1>
             <p class="text-muted">
-                Build LDAP filters online in a natural language style. Great for learning and prototyping LDAP filters without memorizing the syntax. Use the <a href="./dsl-manual.html" target="_blank">LFL - domain specific language for LDAP filters</a>.
+                Build LDAP filters online in a natural language style. Great for learning and prototyping LDAP filters without memorizing the syntax.<br />Use the <a href="./dsl-manual.html" target="_blank">LFL - domain specific language for LDAP filters</a>.
             </p>
         </div>
 
         <div class="card shadow-sm">
             <div class="card-header">
-                <h5 class="mb-1">LFL Input</h5>
-                <small class="text-muted">
-                </small>
+                <h5 class="mb-1">LDAP Filter Language Input</h5>
+                <small class="text-muted"></small>
             </div>
             <div class="card-body">
                 <div class="mb-3 d-flex flex-wrap gap-2">
-                    <button class="btn btn-primary" id="dslParseBtn">Parse</button>
+                    <button class="btn btn-primary" id="dslParseBtn">Validate</button>
+                    <button class="btn btn-primary float" id="dslCopyBtn">Copy</button>
                     <button class="btn btn-outline-danger" id="dslClearBtn">Reset</button>
                 </div>
                 <div class="builder-layout">
@@ -42,48 +43,63 @@
                             </span>
                         </div>
 
-                        <div style="min-height:100px">
+                        <div>
                             <div id="dslError" class="mt-3 d-none">
                                 <div id="dslErrorMessage" class="text-danger"></div>
                                 <pre id="dslErrorCaret" class="caret-line mb-0"></pre>
                             </div>
                         </div>
+
+                        <div class="card shadow-sm mt-4">
+                            <div class="card-header">
+                                <h5 class="card-title">LDAP filter</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="ldapFilter" class="caret-line form-control"></div>
+
+                                <div class="mt-3 d-flex flex-wrap gap-2">
+                                    <button class="btn btn-primary float" id="ldapFormatBtn">Format</button>
+                                    <button class="btn btn-primary float" id="btnCopy">Copy</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <details class="cheat-sheet" open>
-                        <summary>LFL Cheat Sheet</summary>
-                        <ul class="list cheat-sheet-list">
-                            <li><code>{ objectClass: "user" }</code></li>
-                            <li><code>{ cn ~= "john" }</code> (contains)</li>
-                            <li><code>{ cn ^= "jo" }</code> (starts with)</li>
-                            <li><code>{ cn $= "hn" }</code> (ends with)</li>
-                            <li><code>{ cn != "john" }</code></li>
-                            <li><code>{ age >= 18 }</code></li>
-                            <li><code>{ isActive: true }</code></li>
-                            <li><code>{ !isDisabled }</code></li>
-                            <li><code>{ department in ["IT", "HR"] }</code></li>
-                            <li><code>{ memberOf any ["A", "B"] }</code></li>
-                            <li><code>{ (&amp; objectClass: "user", sn: "Smith") }</code></li>
-                            <li><code>{ (| sn: "Smith", sn: "Jones") }</code></li>
-                        </ul>
-                    </details>
+                    <div class="cheat-sheet">
+                        <table title="LFL cheat sheet">
+                            <tr><th>What you want</th><th>Write this</th></tr>
+                            <tr><td>Exact match</td><td><code>cn: "John"</code></td></tr>
+                            <tr><td>Not equal</td><td><code>cn: not "John"</code></td></tr>
+                            <tr><td>Attribute exists</td><td><code>mail: any</code></td></tr>
+                            <tr><td>Attribute missing</td><td><code>mail: not any</code></td></tr>
+                            <tr><td>Contains text</td><td><code>cn: "*John*"</code></td></tr>
+                            <tr><td>Does NOT contain</td><td><code>cn: not "*Admin*"</code></td></tr>
+                            <tr><td>Starts with</td><td><code>cn: "Jo*"</code></td></tr>
+                            <tr><td>Does NOT start with</td><td><code>cn: not "Test*"</code></td></tr>
+                            <tr><td>Ends with</td><td><code>cn: "*son"</code></td></tr>
+                            <tr><td>Matches every listed value</td><td><code>memberOf: all of "A","B","C"</code></td></tr>
+                            <tr><td>Matches at least one listed value</td><td><code>department: any of "IT","HR","Finance"</code></td></tr>
+                            <tr><td>Does NOT match every listed value</td><td><code>memberOf: not all of "A","B","C"</code></td></tr>
+                            <tr><td>Does NOT match any listed value</td><td><code>department: not any of "IT","HR","Finance"</code></td></tr>
+                            <tr><td>Approximately matches (fuzzy)</td><td><code>cn: similar to "Jon"</code></td></tr>
+                            <tr><td>Does NOT approximately match</td><td><code>cn: not similar to "Jon"</code></td></tr>
+                            <tr><td>Greater than or equal</td><td><code>age: &gt;= "18"</code></td></tr>
+                            <tr><td>Less than or equal</td><td><code>age: &lt;= "65"</code></td></tr>
+                            <tr><td>Less than</td><td><code>age: &lt; "18"</code></td></tr>
+                            <tr><td>Greater than</td><td><code>age: &gt; "65"</code></td></tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
-
-        <div class="card shadow-sm mt-4">
-            <div class="card-header">
-                <h5 class="card-title">LDAP output</h5>
-            </div>
-            <div class="card-body">
-                <div id="ldapFilter" class="row g-3">
-
-                </div>
-            </div>
-        </div>
     </div>
 
+    <div id="cookie-banner">
+        This site uses analytics cookies.
+        <button id="accept-cookies" class="btn btn-primary">Accept</button>
+        <button id="decline-cookies" class="btn btn-secondary">Decline</button>
+    </div>
     <script src="./ga.js"></script>
 
     <script src="./builder.js"></script>

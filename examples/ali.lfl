@@ -1,0 +1,8 @@
+{
+    objectClass: "user"
+    sn: any of "A*","B*","C*","D*"
+    givenName: "Ali*"
+    loginDisabled: not "TRUE"
+    lockedByIntruder: not "TRUE"
+    passwordExpiration: > "202601010000Z"
+}
