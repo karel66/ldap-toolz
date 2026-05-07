@@ -441,3 +441,37 @@ textarea {
     border-color: var(--primary);
     color: var(--primary);
 }
+
+.builder-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 16px;
+    align-items: start;
+}
+
+.cheat-sheet {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--control-bg);
+    padding: 10px 12px;
+}
+
+.cheat-sheet summary {
+    cursor: pointer;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.cheat-sheet-list {
+    margin-top: 8px;
+}
+
+.cheat-sheet-list li {
+    margin-bottom: 6px;
+}
+
+@media (max-width: 960px) {
+    .builder-layout {
+        grid-template-columns: 1fr;
+    }
+}
