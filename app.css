@@ -127,7 +127,7 @@ table {
 
 th,
 td {
-    padding: 10px;
+    padding: 6px 16px 6px 16px;
     border: 1px solid var(--border);
     vertical-align: top;
 }
@@ -453,7 +453,7 @@ textarea {
     left: 0;
     right: 0;
     background: #020617;
-    color: var(--text);
+    color: silver;
     border-top: 1px solid var(--border);
     padding: 12px;
     font-size: 14px;
@@ -497,26 +497,44 @@ textarea {
 
 .builder-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 400px;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 440px);
     gap: 16px;
-    align-items: start;
+    align-items: stretch;
+}
+
+.builder-left {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+}
+
+.builder-left > .card,
+.cheat-sheet {
+    min-width: 0;
 }
 
 .cheat-sheet {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--control-bg);
-    font-size: 0.8rem;
-    max-height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cheat-sheet .card-body {
+    flex: 1;
     overflow-y: auto;
 }
 
-button.float {
-    float: right;
+.cheat-sheet table {
+    margin: 0;
 }
 
 @media (max-width: 960px) {
     .builder-layout {
         grid-template-columns: 1fr;
+    }
+
+    .cheat-sheet .card-body {
+        max-height: none;
+        overflow: visible;
     }
 }

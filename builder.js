@@ -68,6 +68,8 @@ function makeCaretPointer(source, position) {
 }
 
 function dslRender() {
+    ldapFilter.textContent = "";
+
     const value = dslInput.value;
 
     if (value.trim() === "") {
@@ -136,7 +138,7 @@ function resetInput() {
     dslInput.focus();
     dslInput.setSelectionRange(0, dslInput.value.length);
     document.execCommand("delete");
-    dslInput.value = "{\r\n    objectClass: \"*\"\r\n}";
+    document.execCommand("insertText", false, "{\r\n    objectClass: \"*\"\r\n}");
 }
 
 dslParseBtn.addEventListener("click", dslRender);

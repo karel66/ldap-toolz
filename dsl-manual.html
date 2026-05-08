@@ -21,19 +21,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LFL: LDAP Filter Language Beginner Guide</title>
-    <meta name="description" content="Learn LFL, a readable domain specific language for writing LDAP filters with AND blocks, OR branches, wildcards, comparisons and comments.">
+    <title>LDAP Filter DSL Guide</title>
+    <meta name="description" content="Learn a readable domain specific language for writing LDAP filters with AND blocks, OR branches, wildcards, comparisons and comments.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://karel66.github.io/ldap-toolz/dsl-manual.html">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="LFL: LDAP Filter Language Beginner Guide">
-    <meta property="og:description" content="A beginner guide to LFL syntax for readable LDAP filters, including blocks, OR branches, comments, wildcards and comparisons.">
+    <meta property="og:title" content="LDAP Filter DSL Guide">
+    <meta property="og:description" content="A beginner guide to syntax for readable LDAP filters, including blocks, OR branches, comments, wildcards and comparisons.">
     <meta property="og:url" content="https://karel66.github.io/ldap-toolz/dsl-manual.html">
     <meta property="og:image" content="https://karel66.github.io/ldap-toolz/favicon.png">
     <meta name="twitter:card" content="summary">
@@ -43,62 +43,64 @@ SOFTWARE.
     <link href="./app.css" rel="stylesheet" />
     <script src="./theme.js" defer></script>
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "TechArticle",
-        "headline": "LFL: LDAP Filter Language Beginner Guide",
-        "url": "https://karel66.github.io/ldap-toolz/dsl-manual.html",
-        "description": "Learn LFL syntax for readable LDAP filters with examples for blocks, OR branches, wildcards, comparisons and comments."
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "TechArticle",
+            "headline": "LDAP Filter DSL Guide",
+            "url": "https://karel66.github.io/ldap-toolz/dsl-manual.html",
+            "description": "Learn LDAP Filter DSL syntax for readable LDAP filters with examples for blocks, OR branches, wildcards, comparisons and comments."
+        }
     </script>
 </head>
 <body>
-<main class="manual">
+    <main class="container">
+        <nav class="site-nav" aria-label="Main navigation">
+            <a href="./builder.html">LDAP Filter Builder</a>
+        </nav>
+        <h1>LDAP Filter DSL Guide</h1>
+        <p>This page explains a simple way to write LDAP filters with readable blocks and attribute expressions in LDAP filters domain specific language.</p>
 
-<h1>LFL: LDAP Filter Language Beginner Guide</h1>
-<p>This page explains a simple way to write LDAP filters with readable blocks and attribute expressions in LDAP filters domain specific language - LFL.</p>
+        <nav class="toc" aria-labelledby="tocTitle">
+            <h2 id="tocTitle">Contents</h2>
+            <ol>
+                <li><a href="#what-is-this">What is this?</a></li>
+                <li><a href="#filter-structure">Filter structure</a></li>
+                <li><a href="#comments">Comments</a></li>
+                <li><a href="#attribute-expressions">Attribute expressions</a></li>
+                <li><a href="#common-operations">Most common operations</a></li>
+                <li><a href="#combining-conditions">Combining conditions</a></li>
+                <li><a href="#wildcards">Wildcards in equality</a></li>
+                <li><a href="#set-equality">Set equality shortcuts</a></li>
+                <li><a href="#ordering">Ordering comparisons</a></li>
+                <li><a href="#approximate">Approximate matching</a></li>
+                <li><a href="#full-example">Full example</a></li>
+                <li><a href="#tips">Tips</a></li>
+            </ol>
+        </nav>
 
-<nav class="toc" aria-labelledby="tocTitle">
-<h2 id="tocTitle">Contents</h2>
-<ol>
-<li><a href="#what-is-this">What is this?</a></li>
-<li><a href="#filter-structure">Filter structure</a></li>
-<li><a href="#comments">Comments</a></li>
-<li><a href="#attribute-expressions">Attribute expressions</a></li>
-<li><a href="#common-operations">Most common operations</a></li>
-<li><a href="#combining-conditions">Combining conditions</a></li>
-<li><a href="#wildcards">Wildcards in equality</a></li>
-<li><a href="#set-equality">Set equality shortcuts</a></li>
-<li><a href="#ordering">Ordering comparisons</a></li>
-<li><a href="#approximate">Approximate matching</a></li>
-<li><a href="#full-example">Full example</a></li>
-<li><a href="#tips">Tips</a></li>
-</ol>
-</nav>
-
-<h2 id="what-is-this">1. What is this?</h2>
-<p>LDAP filters are normally hard to read, like this:</p>
+        <h2 id="what-is-this">1. What is this?</h2>
+        <p>LDAP filters are normally hard to read, like this:</p>
 <pre><code>(&amp;(objectClass=user)(mail=*))</code></pre>
 
-<p>With this DSL, you can write the same logic like this:</p>
+        <p>With this DSL, you can write the same logic like this:</p>
 <pre><code>{
     objectClass: "user"
     mail: any
 }</code></pre>
 
-<div class="note">
-You do NOT need to know LDAP syntax to use this DSL.
-</div>
+        <div class="note">
+            You do NOT need to know LDAP syntax to use this DSL.
+        </div>
 
-<h2 id="filter-structure">2. Filter structure</h2>
-<p>A filter is made from one or more AND blocks. Each block uses curly braces, and each attribute expression inside a block must be on its own line.</p>
+        <h2 id="filter-structure">2. Filter structure</h2>
+        <p>A filter is made from one or more AND blocks. Each block uses curly braces, and each attribute expression inside a block must be on its own line.</p>
 <pre><code>{
     objectClass: "user"
     mail: any
     accountStatus: not "disabled"
 }</code></pre>
 
-<p>Use <code>or</code> between blocks when any block may match:</p>
+        <p>Use <code>or</code> between blocks when any block may match:</p>
 <pre><code>{
     department: "IT"
     title: "*Engineer*"
@@ -109,7 +111,7 @@ or
     title: "*Analyst*"
 }</code></pre>
 
-<p>Use <code>or not</code> when the next block must not match:</p>
+        <p>Use <code>or not</code> when the next block must not match:</p>
 <pre><code>{
     objectClass: "user"
 }
@@ -118,12 +120,12 @@ or not
     accountStatus: "disabled"
 }</code></pre>
 
-<div class="note">
-Inside <code>{ }</code>, expressions are combined with AND. Separate sibling expressions with newlines, not spaces.
-</div>
+        <div class="note">
+            Inside <code>{ }</code>, expressions are combined with AND. Separate sibling expressions with newlines, not spaces.
+        </div>
 
-<h2 id="comments">3. Comments</h2>
-<p>Comments start with <code>//</code> and continue until the end of the line. They can be on their own line or after an expression.</p>
+        <h2 id="comments">3. Comments</h2>
+        <p>Comments start with <code>//</code> and continue until the end of the line. They can be on their own line or after an expression.</p>
 <pre><code>// Active users with an email address
 {
     objectClass: "user"
@@ -131,58 +133,58 @@ Inside <code>{ }</code>, expressions are combined with AND. Separate sibling exp
     accountStatus: not "disabled"
 }</code></pre>
 
-<p>Inside quoted values, <code>//</code> is treated as normal text:</p>
+        <p>Inside quoted values, <code>//</code> is treated as normal text:</p>
 <pre><code>{
     url: "https://example.test/path"
     note: "literal // text"
 }</code></pre>
 
-<h2 id="attribute-expressions">4. Attribute expressions</h2>
-<p>Most conditions use this shape:</p>
+        <h2 id="attribute-expressions">4. Attribute expressions</h2>
+        <p>Most conditions use this shape:</p>
 <pre><code>attribute: operator-or-value</code></pre>
 
-<p>Examples:</p>
+        <p>Examples:</p>
 <pre><code>cn: "John"
 mail: any
 age: &gt;= "18"</code></pre>
 
-<h2 id="common-operations">5. Most common operations</h2>
-<table>
-<tr><th>What you want</th><th>Write this</th></tr>
-<tr><td>Exact match</td><td><code>cn: "John"</code></td></tr>
-<tr><td>Not equal</td><td><code>cn: not "John"</code></td></tr>
-<tr><td>Attribute exists</td><td><code>mail: any</code></td></tr>
-<tr><td>Attribute missing</td><td><code>mail: not any</code></td></tr>
-<tr><td>Contains text</td><td><code>cn: "*John*"</code></td></tr>
-<tr><td>Does NOT contain</td><td><code>cn: not "*Admin*"</code></td></tr>
-<tr><td>Starts with</td><td><code>cn: "Jo*"</code></td></tr>
-<tr><td>Does NOT start with</td><td><code>cn: not "Test*"</code></td></tr>
-<tr><td>Ends with</td><td><code>cn: "*son"</code></td></tr>
-<tr><td>Matches every listed value</td><td><code>memberOf: all of "A","B","C"</code></td></tr>
-<tr><td>Matches at least one listed value</td><td><code>department: any of "IT","HR","Finance"</code></td></tr>
-<tr><td>Does NOT match every listed value</td><td><code>memberOf: not all of "A","B","C"</code></td></tr>
-<tr><td>Does NOT match any listed value</td><td><code>department: not any of "IT","HR","Finance"</code></td></tr>
-<tr><td>Approximately matches (fuzzy)</td><td><code>cn: similar to "Jon"</code></td></tr>
-<tr><td>Does NOT approximately match</td><td><code>cn: not similar to "Jon"</code></td></tr>
-<tr><td>Greater than or equal</td><td><code>age: &gt;= "18"</code></td></tr>
-<tr><td>Less than or equal</td><td><code>age: &lt;= "65"</code></td></tr>
-<tr><td>Less than</td><td><code>age: &lt; "18"</code></td></tr>
-<tr><td>Greater than</td><td><code>age: &gt; "65"</code></td></tr>
-</table>
+        <h2 id="common-operations">5. Most common operations</h2>
+        <table>
+            <tr><th>What you want</th><th>Write this</th></tr>
+            <tr><td>Exact match</td><td><code>cn: "John"</code></td></tr>
+            <tr><td>Not equal</td><td><code>cn: not "John"</code></td></tr>
+            <tr><td>Attribute exists</td><td><code>mail: any</code></td></tr>
+            <tr><td>Attribute missing</td><td><code>mail: not any</code></td></tr>
+            <tr><td>Contains text</td><td><code>cn: "*John*"</code></td></tr>
+            <tr><td>Does NOT contain</td><td><code>cn: not "*Admin*"</code></td></tr>
+            <tr><td>Starts with</td><td><code>cn: "Jo*"</code></td></tr>
+            <tr><td>Does NOT start with</td><td><code>cn: not "Test*"</code></td></tr>
+            <tr><td>Ends with</td><td><code>cn: "*son"</code></td></tr>
+            <tr><td>Matches every listed value</td><td><code>memberOf: all of "A","B","C"</code></td></tr>
+            <tr><td>Matches at least one listed value</td><td><code>department: any of "IT","HR","Finance"</code></td></tr>
+            <tr><td>Does NOT match every listed value</td><td><code>memberOf: not all of "A","B","C"</code></td></tr>
+            <tr><td>Does NOT match any listed value</td><td><code>department: not any of "IT","HR","Finance"</code></td></tr>
+            <tr><td>Approximately matches (fuzzy)</td><td><code>cn: similar to "Jon"</code></td></tr>
+            <tr><td>Does NOT approximately match</td><td><code>cn: not similar to "Jon"</code></td></tr>
+            <tr><td>Greater than or equal</td><td><code>age: &gt;= "18"</code></td></tr>
+            <tr><td>Less than or equal</td><td><code>age: &lt;= "65"</code></td></tr>
+            <tr><td>Less than</td><td><code>age: &lt; "18"</code></td></tr>
+            <tr><td>Greater than</td><td><code>age: &gt; "65"</code></td></tr>
+        </table>
 
-<div class="note">
-Use <code>:</code> for equality values, presence, set equality, fuzzy matching, and ordering.
-</div>
+        <div class="note">
+            Use <code>:</code> for equality values, presence, set equality, fuzzy matching, and ordering.
+        </div>
 
-<h2 id="combining-conditions">6. Combining conditions</h2>
+        <h2 id="combining-conditions">6. Combining conditions</h2>
 
-<h3>AND (all must match)</h3>
+        <h3>AND (all must match)</h3>
 <pre><code>{
     objectClass: "user"
     department: "IT"
 }</code></pre>
 
-<h3>OR (any can match)</h3>
+        <h3>OR (any can match)</h3>
 <pre><code>{
     cn: "Admin*"
 }
@@ -191,26 +193,26 @@ or
     cn: "Service*"
 }</code></pre>
 
-<h3>NOT (invert logic)</h3>
+        <h3>NOT (invert logic)</h3>
 <pre><code>not {
     accountStatus: "disabled"
     accountStatus: "locked"
 }</code></pre>
 
-<h2 id="wildcards">7. Wildcards in equality</h2>
-<p>The <code>*</code> character is treated as an LDAP wildcard inside <code>:</code> equality values.</p>
-<table>
-<tr><th>Pattern</th><th>Meaning</th></tr>
-<tr><td><code>cn: "John"</code></td><td>Exact value</td></tr>
-<tr><td><code>cn: "John*"</code></td><td>Starts with John</td></tr>
-<tr><td><code>cn: "*John"</code></td><td>Ends with John</td></tr>
-<tr><td><code>cn: "*John*"</code></td><td>Contains John</td></tr>
-</table>
+        <h2 id="wildcards">7. Wildcards in equality</h2>
+        <p>The <code>*</code> character is treated as an LDAP wildcard inside <code>:</code> equality values.</p>
+        <table>
+            <tr><th>Pattern</th><th>Meaning</th></tr>
+            <tr><td><code>cn: "John"</code></td><td>Exact value</td></tr>
+            <tr><td><code>cn: "John*"</code></td><td>Starts with John</td></tr>
+            <tr><td><code>cn: "*John"</code></td><td>Ends with John</td></tr>
+            <tr><td><code>cn: "*John*"</code></td><td>Contains John</td></tr>
+        </table>
 
-<h2 id="set-equality">8. Set equality shortcuts</h2>
-<p>Use set equality when the same attribute must be compared with several values.</p>
+        <h2 id="set-equality">8. Set equality shortcuts</h2>
+        <p>Use set equality when the same attribute must be compared with several values.</p>
 <pre><code>memberOf: all of "Admins","VPN Users","Developers"</code></pre>
-<p>This is equivalent to:</p>
+        <p>This is equivalent to:</p>
 <pre><code>{
     memberOf: "Admins"
     memberOf: "VPN Users"
@@ -218,19 +220,19 @@ or
 }</code></pre>
 
 <pre><code>department: any of "IT","Security","Operations"</code></pre>
-<p>This matches when the attribute has at least one of the listed values.</p>
+        <p>This matches when the attribute has at least one of the listed values.</p>
 
-<p>You can also negate set equality:</p>
+        <p>You can also negate set equality:</p>
 <pre><code>memberOf: not all of "Admins","VPN Users"
 department: not any of "HR","Finance"</code></pre>
 
-<h2 id="ordering">9. Ordering comparisons</h2>
-<p>Use ordering comparisons when your LDAP attribute values can be ordered by the server.</p>
+        <h2 id="ordering">9. Ordering comparisons</h2>
+        <p>Use ordering comparisons when your LDAP attribute values can be ordered by the server.</p>
 <pre><code>{
     age: &gt;= "18"
     age: &lt;= "65"
 }</code></pre>
-<p>Strict comparisons are available too:</p>
+        <p>Strict comparisons are available too:</p>
 <pre><code>{
     age: &lt; "18"
 }
@@ -239,18 +241,18 @@ or
     age: &gt; "65"
 }</code></pre>
 
-<div class="note">
-LDAP has native <code>&gt;=</code> and <code>&lt;=</code> filters. This DSL implements <code>&lt;</code> as NOT <code>&gt;=</code>, and <code>&gt;</code> as NOT <code>&lt;=</code>.
-</div>
+        <div class="note">
+            LDAP has native <code>&gt;=</code> and <code>&lt;=</code> filters. This DSL implements <code>&lt;</code> as NOT <code>&gt;=</code>, and <code>&gt;</code> as NOT <code>&lt;=</code>.
+        </div>
 
-<h2 id="approximate">10. Approximate (fuzzy) matching</h2>
-<p>Use this when you want a "close enough" match (depends on LDAP server rules):</p>
+        <h2 id="approximate">10. Approximate (fuzzy) matching</h2>
+        <p>Use this when you want a "close enough" match (depends on LDAP server rules):</p>
 <pre><code>cn: similar to "Jon"</code></pre>
-<p>To invert it, write:</p>
+        <p>To invert it, write:</p>
 <pre><code>cn: not similar to "Jon"</code></pre>
-<p>This is useful for small spelling differences like <code>John</code> vs <code>Jon</code>.</p>
+        <p>This is useful for small spelling differences like <code>John</code> vs <code>Jon</code>.</p>
 
-<h2 id="full-example">11. Full example</h2>
+        <h2 id="full-example">11. Full example</h2>
 <pre><code>// Include enabled people in supported departments.
 {
     objectClass: "user"
@@ -266,24 +268,24 @@ or not
     lastLogonAge: &gt; "90"
 }</code></pre>
 
-<h2 id="tips">12. Tips</h2>
-<ul>
-<li>Always use quotes for values: <code>"text"</code></li>
-<li>Use <code>//</code> for comments that run to the end of the line</li>
-<li>Use <code>{ }</code> for AND blocks</li>
-<li>Use <code>or</code> between blocks for OR</li>
-<li>Use <code>or not</code> before a block to invert that OR branch</li>
-<li>Use <code>:</code> for exact values and wildcard value patterns</li>
-<li>Use <code>: any</code> instead of remembering <code>=*</code></li>
-<li>Use <code>: similar to</code> for approximate (fuzzy) matching</li>
-</ul>
+        <h2 id="tips">12. Tips</h2>
+        <ul>
+            <li>Always use quotes for values: <code>"text"</code></li>
+            <li>Use <code>//</code> for comments that run to the end of the line</li>
+            <li>Use <code>{ }</code> for AND blocks</li>
+            <li>Use <code>or</code> between blocks for OR</li>
+            <li>Use <code>or not</code> before a block to invert that OR branch</li>
+            <li>Use <code>:</code> for exact values and wildcard value patterns</li>
+            <li>Use <code>: any</code> instead of remembering <code>=*</code></li>
+            <li>Use <code>: similar to</code> for approximate (fuzzy) matching</li>
+        </ul>
 
-</main>
-     <div id="cookie-banner">
-     This site uses analytics cookies.
-     <button id="accept-cookies" class="btn btn-primary">Accept</button>
-     <button id="decline-cookies" class="btn btn-secondary">Decline</button>
- </div>
- <script src="./ga.js"></script>
+    </main>
+    <div id="cookie-banner">
+        This site uses analytics cookies.
+        <button id="accept-cookies" class="btn btn-primary">Accept</button>
+        <button id="decline-cookies" class="btn btn-secondary">Decline</button>
+    </div>
+    <script src="./ga.js"></script>
 </body>
 </html>

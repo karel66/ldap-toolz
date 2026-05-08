@@ -21,8 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -44,19 +44,22 @@ SOFTWARE.
     <script src="./theme.js" defer></script>
     <script src="./ldap-parser.js"></script>
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "LDAP Filter Parser & Validator",
-        "url": "https://karel66.github.io/ldap-toolz/parser.html",
-        "applicationCategory": "DeveloperApplication",
-        "operatingSystem": "Any",
-        "description": "Validate, parse, escape and format LDAP search filters in the browser."
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "LDAP Filter Parser & Validator",
+            "url": "https://karel66.github.io/ldap-toolz/parser.html",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Any",
+            "description": "Validate, parse, escape and format LDAP search filters in the browser."
+        }
     </script>
 </head>
 <body>
     <div class="container">
+        <nav class="site-nav" aria-label="Main navigation">
+            <a href="./builder.html">LDAP Filter Builder</a>
+        </nav>
         <div class="mb-4">
             <h1>LDAP Filter Parser & Validator Online</h1>
             <p class="text-muted">
