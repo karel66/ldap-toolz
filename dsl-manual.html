@@ -40,21 +40,39 @@ SOFTWARE.
 <h1>LFL: LDAP Filter Language Beginner Guide</h1>
 <p>This page explains a simple way to write LDAP filters with readable blocks and attribute expressions in LDAP filters domain specific language - LFL.</p>
 
-<h2>1. What is this?</h2>
+<nav class="toc" aria-labelledby="tocTitle">
+<h2 id="tocTitle">Contents</h2>
+<ol>
+<li><a href="#what-is-this">What is this?</a></li>
+<li><a href="#filter-structure">Filter structure</a></li>
+<li><a href="#comments">Comments</a></li>
+<li><a href="#attribute-expressions">Attribute expressions</a></li>
+<li><a href="#common-operations">Most common operations</a></li>
+<li><a href="#combining-conditions">Combining conditions</a></li>
+<li><a href="#wildcards">Wildcards in equality</a></li>
+<li><a href="#set-equality">Set equality shortcuts</a></li>
+<li><a href="#ordering">Ordering comparisons</a></li>
+<li><a href="#approximate">Approximate matching</a></li>
+<li><a href="#full-example">Full example</a></li>
+<li><a href="#tips">Tips</a></li>
+</ol>
+</nav>
+
+<h2 id="what-is-this">1. What is this?</h2>
 <p>LDAP filters are normally hard to read, like this:</p>
 <pre><code>(&amp;(objectClass=user)(mail=*))</code></pre>
 
 <p>With this DSL, you can write the same logic like this:</p>
 <pre><code>{
     objectClass: "user"
-    mail: any // attribute exists
+    mail: any
 }</code></pre>
 
 <div class="note">
 You do NOT need to know LDAP syntax to use this DSL.
 </div>
 
-<h2>2. Filter structure</h2>
+<h2 id="filter-structure">2. Filter structure</h2>
 <p>A filter is made from one or more AND blocks. Each block uses curly braces, and each attribute expression inside a block must be on its own line.</p>
 <pre><code>{
     objectClass: "user"
@@ -86,7 +104,7 @@ or not
 Inside <code>{ }</code>, expressions are combined with AND. Separate sibling expressions with newlines, not spaces.
 </div>
 
-<h2>3. Comments</h2>
+<h2 id="comments">3. Comments</h2>
 <p>Comments start with <code>//</code> and continue until the end of the line. They can be on their own line or after an expression.</p>
 <pre><code>// Active users with an email address
 {
@@ -101,7 +119,7 @@ Inside <code>{ }</code>, expressions are combined with AND. Separate sibling exp
     note: "literal // text"
 }</code></pre>
 
-<h2>4. Attribute expressions</h2>
+<h2 id="attribute-expressions">4. Attribute expressions</h2>
 <p>Most conditions use this shape:</p>
 <pre><code>attribute: operator-or-value</code></pre>
 
@@ -110,7 +128,7 @@ Inside <code>{ }</code>, expressions are combined with AND. Separate sibling exp
 mail: any
 age: &gt;= "18"</code></pre>
 
-<h2>5. Most common operations</h2>
+<h2 id="common-operations">5. Most common operations</h2>
 <table>
 <tr><th>What you want</th><th>Write this</th></tr>
 <tr><td>Exact match</td><td><code>cn: "John"</code></td></tr>
@@ -138,7 +156,7 @@ age: &gt;= "18"</code></pre>
 Use <code>:</code> for equality values, presence, set equality, fuzzy matching, and ordering.
 </div>
 
-<h2>6. Combining conditions</h2>
+<h2 id="combining-conditions">6. Combining conditions</h2>
 
 <h3>AND (all must match)</h3>
 <pre><code>{
@@ -161,7 +179,7 @@ or
     accountStatus: "locked"
 }</code></pre>
 
-<h2>7. Wildcards in equality</h2>
+<h2 id="wildcards">7. Wildcards in equality</h2>
 <p>The <code>*</code> character is treated as an LDAP wildcard inside <code>:</code> equality values.</p>
 <table>
 <tr><th>Pattern</th><th>Meaning</th></tr>
@@ -171,7 +189,7 @@ or
 <tr><td><code>cn: "*John*"</code></td><td>Contains John</td></tr>
 </table>
 
-<h2>8. Set equality shortcuts</h2>
+<h2 id="set-equality">8. Set equality shortcuts</h2>
 <p>Use set equality when the same attribute must be compared with several values.</p>
 <pre><code>memberOf: all of "Admins","VPN Users","Developers"</code></pre>
 <p>This is equivalent to:</p>
@@ -188,7 +206,7 @@ or
 <pre><code>memberOf: not all of "Admins","VPN Users"
 department: not any of "HR","Finance"</code></pre>
 
-<h2>9. Ordering comparisons</h2>
+<h2 id="ordering">9. Ordering comparisons</h2>
 <p>Use ordering comparisons when your LDAP attribute values can be ordered by the server.</p>
 <pre><code>{
     age: &gt;= "18"
@@ -207,14 +225,14 @@ or
 LDAP has native <code>&gt;=</code> and <code>&lt;=</code> filters. This DSL implements <code>&lt;</code> as NOT <code>&gt;=</code>, and <code>&gt;</code> as NOT <code>&lt;=</code>.
 </div>
 
-<h2>10. Approximate (fuzzy) matching</h2>
+<h2 id="approximate">10. Approximate (fuzzy) matching</h2>
 <p>Use this when you want a "close enough" match (depends on LDAP server rules):</p>
 <pre><code>cn: similar to "Jon"</code></pre>
 <p>To invert it, write:</p>
 <pre><code>cn: not similar to "Jon"</code></pre>
 <p>This is useful for small spelling differences like <code>John</code> vs <code>Jon</code>.</p>
 
-<h2>11. Full example</h2>
+<h2 id="full-example">11. Full example</h2>
 <pre><code>// Include enabled people in supported departments.
 {
     objectClass: "user"
@@ -230,7 +248,7 @@ or not
     lastLogonAge: &gt; "90"
 }</code></pre>
 
-<h2>12. Tips</h2>
+<h2 id="tips">12. Tips</h2>
 <ul>
 <li>Always use quotes for values: <code>"text"</code></li>
 <li>Use <code>//</code> for comments that run to the end of the line</li>
@@ -243,5 +261,11 @@ or not
 </ul>
 
 </main>
+     <div id="cookie-banner">
+     This site uses analytics cookies.
+     <button id="accept-cookies" class="btn btn-primary">Accept</button>
+     <button id="decline-cookies" class="btn btn-secondary">Decline</button>
+ </div>
+ <script src="./ga.js"></script>
 </body>
 </html>

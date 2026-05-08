@@ -1,6 +1,6 @@
 {
     objectClass: "user"
-    sn: any of "A*","B*","C*","D*"
+    sn: any of "A*","B*","C*","D*","E*","F*"
     givenName: "Ali*"
     loginDisabled: not "TRUE"
     lockedByIntruder: not "TRUE"

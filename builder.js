@@ -86,6 +86,7 @@ function dslRender() {
         return;
     }
 
+    localStorage.setItem('last-input', value);
 
     ldapFilter.textContent = LdapDslConverter.toLdap(value);
 
@@ -161,5 +162,12 @@ ldapFormatBtn.addEventListener("click", () => {
     ldapFilter.textContent = ldapResult.ok ? LdapFilterParser.formatLdapFilter(ldapResult.ast) : "";
 });
 
-resetInput();
+const lastInput = localStorage.getItem('last-input');
+if (lastInput) {
+    dslInput.value = lastInput;
+}
+else {
+    resetInput();
+}
+
 dslRender();
