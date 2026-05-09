@@ -33,9 +33,10 @@ const dslErrorMessage = document.getElementById("dslErrorMessage");
 const dslErrorCaret = document.getElementById("dslErrorCaret");
 const ldapFilter = document.getElementById("ldapFilter");
 const btnCopy = document.getElementById("btnCopy");
-const ldapFormatBtn = document.getElementById("ldapFormatBtn");
+const ldapFormatToggle = document.getElementById("ldapFormatToggle");
 
 let debounceHandle = null;
+const formatOutputKey = "format-ldap-output";
 
 function setStatus(statusBadge, text, kind) {
     const icons = {
@@ -67,6 +68,17 @@ function makeCaretPointer(source, position) {
     return `${line}\n${" ".repeat(col)}^`;
 }
 
+function buildLdapOutput(value) {
+    const ldapValue = LdapDslConverter.toLdap(value);
+
+    if (!ldapFormatToggle.checked) {
+        return ldapValue;
+    }
+
+    const ldapResult = LdapFilterParser.tryParse(ldapValue);
+    return ldapResult.ok ? LdapFilterParser.formatLdapFilter(ldapResult.ast) : ldapValue;
+}
+
 function dslRender() {
     ldapFilter.textContent = "";
 
@@ -90,7 +102,7 @@ function dslRender() {
 
     localStorage.setItem('last-input', value);
 
-    ldapFilter.textContent = LdapDslConverter.toLdap(value);
+    ldapFilter.textContent = buildLdapOutput(value);
 
     setStatus(dslStatusBadge, "", "ok");
     dslErrorBox.classList.add("d-none");
@@ -158,11 +170,12 @@ dslCopyBtn.addEventListener("click", () => {
     copyText(dslInput.value, "Copied!", dslCopyBtn);
 });
 
-ldapFormatBtn.addEventListener("click", () => {
-    const value = ldapFilter.textContent;
-    const ldapResult = LdapFilterParser.tryParse(value);
-    ldapFilter.textContent = ldapResult.ok ? LdapFilterParser.formatLdapFilter(ldapResult.ast) : "";
+ldapFormatToggle.addEventListener("change", () => {
+    localStorage.setItem(formatOutputKey, ldapFormatToggle.checked ? "true" : "false");
+    dslRender();
 });
+
+ldapFormatToggle.checked = localStorage.getItem(formatOutputKey) === "true";
 
 const lastInput = localStorage.getItem('last-input');
 if (lastInput) {

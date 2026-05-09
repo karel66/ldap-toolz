@@ -105,9 +105,14 @@ SOFTWARE.
                     <div class="card-body">
                         <div id="ldapFilter" class="caret-line"></div>
 
-                        <div class="mt-3 d-flex flex-wrap gap-2">
-                            <button class="btn btn-primary" id="ldapFormatBtn">Format</button>
+                        <div class="mt-3 d-flex flex-wrap gap-2 output-actions">
                             <button class="btn btn-primary" id="btnCopy">Copy</button>
+                            <label class="switch-control">
+                                <input type="checkbox" id="ldapFormatToggle">
+                                <span class="switch-track" aria-hidden="true"></span>
+                                <span>Format output</span>
+                            </label>
+                           
                         </div>
                     </div>
                 </div>
