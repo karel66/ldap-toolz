@@ -27,7 +27,6 @@ const dslClearBtn = document.getElementById("dslClearBtn");
 const dslCopyBtn = document.getElementById("dslCopyBtn");
 
 const dslInput = document.getElementById("dslInput");
-const dslStatusBadge = document.getElementById("dslStatusBadge");
 const dslErrorBox = document.getElementById("dslError");
 const dslErrorMessage = document.getElementById("dslErrorMessage");
 const dslErrorCaret = document.getElementById("dslErrorCaret");
@@ -37,24 +36,6 @@ const ldapFormatToggle = document.getElementById("ldapFormatToggle");
 
 let debounceHandle = null;
 const formatOutputKey = "format-ldap-output";
-
-function setStatus(statusBadge, text, kind) {
-    const icons = {
-        ok: "✔",
-        error: "✖",
-        warn: "⚠"
-    };
-
-    const icon = icons[kind];
-
-    if (icon) {
-        statusBadge.innerHTML = `<span class="icon">${icon}</span> ${text}`;
-    } else {
-        statusBadge.textContent = text;
-    }
-
-    statusBadge.className = `status status-inline ${kind}`;
-}
 
 function makeCaretPointer(source, position) {
     const safePos = Math.max(0, Math.min(position, source.length));
@@ -85,7 +66,6 @@ function dslRender() {
     const value = dslInput.value;
 
     if (value.trim() === "") {
-        setStatus(dslStatusBadge, "", "warn");
         dslErrorBox.classList.add("d-none");
         return;
     }
@@ -93,7 +73,6 @@ function dslRender() {
     const result = LdapDslParser.tryParse(value);
 
     if (!result.ok) {
-        setStatus(dslStatusBadge, "", "error");
         dslErrorBox.classList.remove("d-none");
         dslErrorMessage.textContent = result.error.fullMessage;
         dslErrorCaret.textContent = makeCaretPointer(value, result.error.position);
@@ -104,7 +83,6 @@ function dslRender() {
 
     ldapFilter.textContent = buildLdapOutput(value);
 
-    setStatus(dslStatusBadge, "", "ok");
     dslErrorBox.classList.add("d-none");
 }
 

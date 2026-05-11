@@ -1,30 +1,6 @@
-﻿
+
 <!DOCTYPE html>
 <html lang="en">
-<!--
-MIT License
-
-Copyright (c) 2026 ldap-toolz contributors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
--->
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -58,7 +34,6 @@ SOFTWARE.
     </script>
 </head>
 <body>
-
     <div class="container">
         <nav class="site-nav" aria-label="Main navigation">
             <a href="./dsl-manual.html">LDAP Filter DSL Guide</a>
@@ -80,16 +55,13 @@ SOFTWARE.
                     </div>
                     <div class="card-body">
                         <div class="mb-3 d-flex flex-wrap gap-2">
-                            <button class="btn btn-primary" id="dslParseBtn">Build</button>
+                            <button class="btn btn-primary" id="dslParseBtn">Compile</button>
                             <button class="btn btn-primary" id="dslCopyBtn">Copy</button>
                             <button class="btn btn-outline-danger" id="dslClearBtn">Reset</button>
                         </div>
 
                         <div class="position-relative">
                             <textarea id="dslInput" class="form-control" rows="12" spellcheck="false"></textarea>
-                            <span id="dslStatusBadge" class="badge bg-secondary status-inline">
-                                Ready
-                            </span>
                         </div>
 
                         <div id="dslError" class="mt-3 d-none">
@@ -113,7 +85,7 @@ SOFTWARE.
                                 <span class="switch-track" aria-hidden="true"></span>
                                 <span>Format output</span>
                             </label>
-                           
+
                         </div>
                     </div>
                 </div>
@@ -121,7 +93,7 @@ SOFTWARE.
 
             <aside class="card shadow-sm cheat-sheet" aria-label="DSL cheat sheet">
                 <div class="card-header">
-                    <strong>DSL cheat sheet &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./dsl-manual.html">Full Guide</a></strong>
+                    <strong>DSL quick reference &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./dsl-manual.html">Full Guide</a></strong>
                 </div>
                 <div class="card-body">
                     <table title="DSL cheat sheet">
