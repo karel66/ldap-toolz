@@ -229,19 +229,15 @@ or
         <p>This is useful for small spelling differences like <code>John</code> vs <code>Jon</code>.</p>
 
         <h2 id="full-example">11. Full example</h2>
-<pre><code>// Include enabled people in supported departments.
+<pre><code>// Find user Ali G
 {
     objectClass: "user"
-    department: any of "IT","Security","Operations"
-    title: any of "*Engineer*","*Architect*"
-    accountStatus: not "disabled"
-    mail: not any // no email address
-    cn: not "*Admin*"
-}
-or not
-{
-    accountStatus: "disabled"
-    lastLogonAge: &gt; "90"
+    sn: any of "A*","B*","C*","D*","E*","F*"
+    sn: "G*"
+    givenName: "Ali*"
+    loginDisabled: not "TRUE"
+    lockedByIntruder: not "TRUE"
+    passwordExpiration: > "202601010000Z"
 }</code></pre>
 
         <h2 id="tips">12. Tips</h2>

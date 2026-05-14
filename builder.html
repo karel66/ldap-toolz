@@ -54,10 +54,15 @@
                         <strong>DSL Input</strong>
                     </div>
                     <div class="card-body">
-                        <div class="mb-3 d-flex flex-wrap gap-2">
+                        <div class="mb-3 d-flex flex-wrap gap-2 output-actions">
                             <button class="btn btn-primary" id="dslParseBtn">Compile</button>
                             <button class="btn btn-primary" id="dslCopyBtn">Copy</button>
                             <button class="btn btn-outline-danger" id="dslClearBtn">Reset</button>
+                            <label class="switch-control">
+                                <input type="checkbox" id="dslCompileToggle">
+                                <span class="switch-track" aria-hidden="true"></span>
+                                <span>Compile while typing</span>
+                            </label>
                         </div>
 
                         <div class="position-relative">

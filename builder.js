@@ -33,6 +33,7 @@ const dslErrorCaret = document.getElementById("dslErrorCaret");
 const ldapFilter = document.getElementById("ldapFilter");
 const btnCopy = document.getElementById("btnCopy");
 const ldapFormatToggle = document.getElementById("ldapFormatToggle");
+const dslCompileToggle = document.getElementById("dslCompileToggle");
 
 let debounceHandle = null;
 const formatOutputKey = "format-ldap-output";
@@ -135,6 +136,8 @@ dslParseBtn.addEventListener("click", dslRender);
 
 dslInput.addEventListener("keydown", handleDslInputTab);
 
+dslInput.addEventListener("input", () => { if (dslCompileToggle.checked) renderDebounced(); });
+
 dslClearBtn.addEventListener("click", () => {
     resetInput();
     dslErrorBox.classList.add("d-none");
@@ -152,6 +155,8 @@ ldapFormatToggle.addEventListener("change", () => {
     localStorage.setItem(formatOutputKey, ldapFormatToggle.checked ? "true" : "false");
     dslRender();
 });
+
+
 
 ldapFormatToggle.checked = localStorage.getItem(formatOutputKey) === "true";
 

@@ -1,6 +1,8 @@
+// Find user Ali G
 {
     objectClass: "user"
     sn: any of "A*","B*","C*","D*","E*","F*"
+    sn: "G*"
     givenName: "Ali*"
     loginDisabled: not "TRUE"
     lockedByIntruder: not "TRUE"
